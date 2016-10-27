@@ -31,3 +31,11 @@
 # Debug files
 *.dSYM/
 *.su
+
+Arduino+RaspPi/RaspberryPi/.idea/misc.xml
+
+Arduino+RaspPi/RaspberryPi/.idea/modules.xml
+
+Arduino+RaspPi/RaspberryPi/.idea/RaspberryPi.iml
+
+Arduino+RaspPi/RaspberryPi/.idea/workspace.xml
