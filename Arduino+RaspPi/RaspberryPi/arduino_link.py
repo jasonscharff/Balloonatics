@@ -9,4 +9,3 @@ def readArduino():
 		text = ser.readline()
 		print text
 
-readArduino()
