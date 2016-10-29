@@ -1,8 +1,10 @@
 import serial
-ser = serial.Serial('/dev/ttyACM0', 9600)
+
+BAUD_RATE = 9600
+
+ser = serial.Serial('/dev/ttyACM0', BAUD_RATE)
 
 def readArduino():
 	while True:
 		text = ser.readline()
 		print text
-		
