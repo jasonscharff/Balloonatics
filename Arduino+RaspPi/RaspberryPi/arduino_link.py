@@ -8,3 +8,5 @@ def readArduino():
 	while True:
 		text = ser.readline()
 		print text
+
+readArduino()
