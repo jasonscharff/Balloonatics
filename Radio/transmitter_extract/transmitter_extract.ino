@@ -11,11 +11,10 @@ void setup()
 void loop()
 {
   if (Serial.available()) {
-    String x = Serial.read();
-    if (x != null && x.length() > 0) {
+    String s = Serial.readString();
+    if (s.length() > 0) {
       digitalWrite(3, HIGH);
       delay(10);
-      String s = "Hello";
       s = STARTER + s + ENDER;
       Serial.print(s);
       delay(10);
