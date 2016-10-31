@@ -16,7 +16,7 @@ def sendArduino(string):
 
 while True:
 	sendArduino()
-	time.sleep(5)
+	time.sleep(30)
 
 
 
