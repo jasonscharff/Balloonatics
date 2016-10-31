@@ -11,11 +11,11 @@ def readArduino():
 		print text
 
 def sendArduino(string):
-	ser.write('Hello, Arduino!')
+	ser.write(string)
 
 
 while True:
-	sendArduino()
+	sendArduino("Hello Arduino")
 	time.sleep(30)
 
 
