@@ -13,4 +13,4 @@ def getTemperatureReadingJSON():
 				  "humidity" : humidity,
 				  "time" : time.time()}
 
-	return json.dumps(dictionary)
+	return dictionary
