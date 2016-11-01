@@ -2,8 +2,18 @@ from picamera import PiCamera
 camera = PiCamera()
 import uuid
 
-BASE_DIRECTORY = '/home/pi/Desktop/photos/'
+BASE_DIRECTORY = '/home/pi/Desktop/'
 
 #take a picture and save it
-image_name = str(uuid.uuid1()) + '.jpg'
-camera.capture(BASE_DIRECTORY + image_name)
+
+def takePhoto():
+	directory = BASE_DIRECTORY + 'photos/'
+	image_name = str(uuid.uuid1()) + '.jpg'
+	camera.capture(directory + image_name)
+
+def takeVideo():
+	directory = BASE_DIRECTORY + 'videos/'
+	video_name = str(uuid.uuid1()) + '.h264'
+	camera.start_recording(video_name)
+	sleep(60)
+	camera.stop_recording()
