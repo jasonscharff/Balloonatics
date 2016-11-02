@@ -19,7 +19,7 @@ void setup()
 void loop()
 {
   if (Serial.available()) {
-    String s = Serial.read();
+    String s = Serial.readString();
     if (s.length() > 0) {
       digitalWrite(3, HIGH);
       delay(10);
