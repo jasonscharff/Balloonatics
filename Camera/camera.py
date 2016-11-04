@@ -1,6 +1,7 @@
 from picamera import PiCamera
-camera = PiCamera()
+import time
 import uuid
+camera = PiCamera()
 
 BASE_DIRECTORY = '/home/pi/Desktop/'
 
@@ -15,5 +16,5 @@ def takeVideo():
 	directory = BASE_DIRECTORY + 'videos/'
 	video_name = str(uuid.uuid1()) + '.h264'
 	camera.start_recording(video_name)
-	sleep(60)
+	time.sleep(60)
 	camera.stop_recording()
