@@ -16,5 +16,5 @@ def takeVideo():
 	directory = BASE_DIRECTORY + 'videos/'
 	video_name = str(uuid.uuid1()) + '.h264'
 	camera.start_recording(video_name)
-	time.sleep(60)
+	time.sleep(15)
 	camera.stop_recording()
