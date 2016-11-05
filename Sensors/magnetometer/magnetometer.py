@@ -11,7 +11,7 @@ import math
 import time
 import sys
 
-class hmc5883l:
+class magnetometer:
 
     __scales = {
         0.88: [0, 0.73],
