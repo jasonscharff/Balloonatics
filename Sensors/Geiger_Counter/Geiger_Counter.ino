@@ -31,7 +31,6 @@ void loop()
     }
     currentTime = millis() - prevTime;
   }
-  Serial.print("CPM = ");
   numCounts = numCounts*calibrate;
   Serial.println(numCounts);
   numCounts = 0;
