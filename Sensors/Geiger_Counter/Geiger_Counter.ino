@@ -1,30 +1,40 @@
-int geigerCounterPin = A0;
+int geigerCounterPin = A3;
 int geigerCount = 0;
-long time;
+long currentTime;
+long prevTime;
 int numCounts = 0;
-int cpm;
+int calibate = 0.49;
+bool wasPreviouslyLow;
 
 void setup() 
 {
   Serial.begin(9600);
   pinMode(geigerCounterPin, INPUT);
+  currentTime = millis();
+  prevTime = millis();
+  wasPreviouslyLow = !analogRead(geigerCounterPin);
 }
 
 void loop() 
 {
-  geigerCount = analogRead(geigerCounterPin);
-  if(geigerCount == HIGH)
+  while(currentTime < 60000)
   {
-    numCounts = numCounts + 1;
-    delay(10);
+    geigerCount = analogRead(geigerCounterPin);
+    if(geigerCount == HIGH && wasPreviouslyLow == true)
+    {
+      wasPreviouslyLow = false;
+      numCounts++;
+    } 
+    else if(geigerCount == LOW)
+    {
+      wasPreviouslyLow = true;
+    }
+    currentTime = millis() - prevTime;
   }
-  time = millis();
-  if(time % 60000 == 0)
-  {
-    Serial.println(numCounts);
-    numCounts = 0;
-    delay(10);
-  }
+  Serial.print("CPM = ");
+  numCounts = numCounts*calibrate;
+  Serial.println(numCounts);
+  numCounts = 0;
+  currentTime = 0;
+  prevTime = millis();
 }
-
-
