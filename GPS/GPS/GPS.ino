@@ -1,6 +1,5 @@
 #include <SoftwareSerial.h>
 SoftwareSerial gpsSerial(10, 11);
-String content = "";
 
 void setup()
 {
