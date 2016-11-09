@@ -1,30 +1,48 @@
-int geigerCounterPin = A0;
-int geigerCount = 0;
-long time;
-int numCounts = 0;
-int cpm;
+#include <ArduinoJson.h>
 
-void setup() 
-{
-  Serial.begin(9600);
+int geigerCounterPin = A3;
+int geigerCount = 0;
+long currentTime;
+long prevTime;
+int numCounts = 0;
+int calibrationConstant = 0.49;
+bool wasPreviouslyLow;
+int BAUD_RATE = 9600;
+
+void setup() {
+  Serial.begin(BAUD_RATE);
   pinMode(geigerCounterPin, INPUT);
+  currentTime = millis();
+  prevTime = millis();
+  wasPreviouslyLow = !analogRead(geigerCounterPin);
 }
 
-void loop() 
-{
-  geigerCount = analogRead(geigerCounterPin);
-  if(geigerCount == HIGH)
-  {
-    numCounts = numCounts + 1;
-    delay(10);
+void loop() {
+  while (currentTime < 60000) {
+    geigerCount = analogRead(geigerCounterPin);
+    if (geigerCount == HIGH && wasPreviouslyLow == true) {
+      wasPreviouslyLow = false;
+      numCounts++;
+    }
+    else if (geigerCount == LOW) {
+      wasPreviouslyLow = true;
+    }
+    currentTime = millis() - prevTime;
   }
-  time = millis();
-  if(time % 60000 == 0)
-  {
-    Serial.println(numCounts);
-    numCounts = 0;
-    delay(10);
-  }
+  numCounts = numCounts * calibrationConstant;
+  sendNumCounts(numCounts);
+
+  numCounts = 0;
+  currentTime = 0;
+  prevTime = millis();
+}
+
+
+void sendNumCounts(int numCounts) {
+  StaticJsonBuffer<200> jsonBuffer;
+  JsonObject& root = jsonBuffer.createObject();
+  root["geiger_cpm"] = numCounts;
+  root.printTo(Serial);
 }
 
 
