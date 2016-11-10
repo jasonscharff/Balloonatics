@@ -163,7 +163,7 @@ def createCSVs():
 
 def createCSV(filename, keys):
 	with open(filename, 'wb') as file:
-	    dict_writer = csv.DictWriter(file, keys)
+		dict_writer = csv.DictWriter(file, keys)
 		dict_writer.writeheader()
 
 def main():
