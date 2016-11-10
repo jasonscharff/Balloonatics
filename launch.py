@@ -123,9 +123,10 @@ def addValueToCSV(filename, keys, dictionary):
 		array = RADIO_DICTIONARY[filename]
 	else:
 		array = []
+
 	array.append(dictionary)
 	RADIO_DICTIONARY[filename] = array
-	print(filename)
+	
 	with open(filename, 'a') as file:
     	writer = csv.DictWriter(file, keys)
         writer.writerow(dictionary)
