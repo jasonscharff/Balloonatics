@@ -15,7 +15,6 @@ sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Camera")
 
 from camera import *
 from temperature import *
-from magnetometer import *
 
 
 #arduino links
