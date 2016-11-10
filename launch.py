@@ -20,10 +20,10 @@ from magnetometer import *
 
 #arduino links
 BAUD_RATE = 9600
-genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
-pressureSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
-radioSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
-gpsSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
+#genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+#pressureSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
+#radioSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
+#gpsSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
 
 
 
@@ -125,7 +125,7 @@ def addValueToCSV(filename, keys, dictionary):
 		array = []
 	array.append(dictionary)
 	RADIO_DICTIONARY[filename] = array
-
+	
 	with open(filename, 'a') as file:
     	writer = csv.DictWriter(file, keys)
         writer.writerow(dictionary)
