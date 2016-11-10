@@ -48,134 +48,134 @@ RADIO_DICTIONARY = {}
 
 
 def operateCamera():
-	while True:
-		takeVideo();
+    while True:
+        takeVideo();
 
 def handleSerialInput(serial, responseFunction):
-	while True:
-		serialInput = serial.readline()
-		if serialInput is not None and len(serialInput) > 0:
-			responseFunction(serialInput)
+    while True:
+        serialInput = serial.readline()
+        if serialInput is not None and len(serialInput) > 0:
+            responseFunction(serialInput)
 
 def handleGenericArduinoSensor():
-	def genericArduinioFunction(serialInput):
-		dictionaryRepresentaion = json.loads(serialInput)
-		geiger_value = dictionaryRepresentaion['geiger_cpm']
-		addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'geiger_cpm' : geiger_value})
+    def genericArduinioFunction(serialInput):
+        dictionaryRepresentaion = json.loads(serialInput)
+        geiger_value = dictionaryRepresentaion['geiger_cpm']
+        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'geiger_cpm' : geiger_value})
 
-	handleSerialInput(genericArduinoSerial, genericArduinioFunction)
+    handleSerialInput(genericArduinoSerial, genericArduinioFunction)
 
 def handleGPSData():
-	def gpsHandler(string):
-		if string.startswith('$GPGGA'):
-			components = string.split(',')
-			gps_timestamp = components[1]
-			lat = components[2]
-			directionLat = components[3]
-			lng = components[4]
-			directionLng = components[5]
-			fix_quality = components[6]
-			num_satelites = components[7]
-			hdop = components[8]
-			altitude = components[9]
-			height_geoid_ellipsoid = components[11]
-			dictionary = {'gps_timestamp': gps_timestamp, 
-						'lat' : lat, 
-						'lat_direction' : directionLat, 
-						'lng' : lng,
-						'lng_direction' : lng_direction, 
-						'fix_quality' : fix_quality, 
-						'num_satelites' : num_satelites, 
-						'hdop' : hdop, 
-						'altitude' : altitude, 
-						'height_geoid_ellipsoid' : height_geoid_ellipsoid}
-			addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
+    def gpsHandler(string):
+        if string.startswith('$GPGGA'):
+            components = string.split(',')
+            gps_timestamp = components[1]
+            lat = components[2]
+            directionLat = components[3]
+            lng = components[4]
+            directionLng = components[5]
+            fix_quality = components[6]
+            num_satelites = components[7]
+            hdop = components[8]
+            altitude = components[9]
+            height_geoid_ellipsoid = components[11]
+            dictionary = {'gps_timestamp': gps_timestamp, 
+                        'lat' : lat, 
+                        'lat_direction' : directionLat, 
+                        'lng' : lng,
+                        'lng_direction' : lng_direction, 
+                        'fix_quality' : fix_quality, 
+                        'num_satelites' : num_satelites, 
+                        'hdop' : hdop, 
+                        'altitude' : altitude, 
+                        'height_geoid_ellipsoid' : height_geoid_ellipsoid}
+            addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
 
-		handleSerialInput(gpsArduinoSerial, gpsHandler)
+        handleSerialInput(gpsArduinoSerial, gpsHandler)
 
 
 
 def handleRaspberryPiGPIO():
-	while True:
-		tempDictionary = getTemperatureReadingJSON()
-		addValueToCSV(GPIO_FILENAME, GPIO_KEYS, tempDictionary)
-		time.sleep(1)
+    while True:
+        tempDictionary = getTemperatureReadingJSON()
+        addValueToCSV(GPIO_FILENAME, GPIO_KEYS, tempDictionary)
+        time.sleep(1)
 
 def sendToRadio():
-	#convert to json
-	jsonified = json.dumps(RADIO_DICTIONARY)
-	#send to radio which will beam down
-	radioSerial.write(jsonified)
+    #convert to json
+    jsonified = json.dumps(RADIO_DICTIONARY)
+    #send to radio which will beam down
+    radioSerial.write(jsonified)
 
 def handlePressureSensor():
-	def pressureFunction(serialInput):
-		dictionaryRepresentaion = json.loads(serialInput)
-		pressure = dictionaryRepresentaion['raw_exterior_pressure']
-		addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'raw_exterior_pressure' : pressure})
+    def pressureFunction(serialInput):
+        dictionaryRepresentaion = json.loads(serialInput)
+        pressure = dictionaryRepresentaion['raw_exterior_pressure']
+        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'raw_exterior_pressure' : pressure})
 
-	handleSerialInput(pressureSerial, pressureFunction)
-		
+    handleSerialInput(pressureSerial, pressureFunction)
+        
 
 def addValueToCSV(filename, keys, dictionary):
-	dictionary = filteredDictionary(dictionary)
-	
-	if filename in RADIO_DICTIONARY:
-		array = RADIO_DICTIONARY[filename]
-	else:
-		array = []
+    dictionary = filteredDictionary(dictionary)
+    
+    if filename in RADIO_DICTIONARY:
+        array = RADIO_DICTIONARY[filename]
+    else:
+        array = []
 
-	array.append(dictionary)
-	RADIO_DICTIONARY[filename] = array
-	
-	with open(filename, 'a') as file:
-    	writer = csv.DictWriter(file, keys)
+    array.append(dictionary)
+    RADIO_DICTIONARY[filename] = array
+    
+    with open(filename, 'a') as file:
+        writer = csv.DictWriter(file, keys)
         writer.writerow(dictionary)
 
 def filterCSVDictionary(keys, dictionary):
-	filteredDictionary = {}
-	for key in keys:
-		if not key in dictionary:
-			#add time if not already there
-			if key == 'time':
-				filteredDictionary[key] = time.time()
-			else:
-				filteredDictionary[key] = ''
-		else:
-			filteredDictionary[key]= dictionary[key]
-	return filteredDictionary
+    filteredDictionary = {}
+    for key in keys:
+        if not key in dictionary:
+            #add time if not already there
+            if key == 'time':
+                filteredDictionary[key] = time.time()
+            else:
+                filteredDictionary[key] = ''
+        else:
+            filteredDictionary[key]= dictionary[key]
+    return filteredDictionary
 
 
 def createCSVs():
-	BASE_DIRECTORY = '/home/pi/Desktop/data/'
+    BASE_DIRECTORY = '/home/pi/Desktop/data/'
 
-	#create csv for geiger counter
-	global GENERIC_ARDUINO_FILENAME = BASE_DIRECTORY + "arduino_one" + str(uuid.uuid4()) + ".csv"
-	createCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS)
+    #create csv for geiger counter
+    global GENERIC_ARDUINO_FILENAME = BASE_DIRECTORY + "arduino_one" + str(uuid.uuid4()) + ".csv"
+    createCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS)
 
-	global GPS_ARDUINO_FILENAME = BASE_DIRECTORY + "gps" + str(uuid.uuid4()) + ".csv"
-	createCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS)
+    global GPS_ARDUINO_FILENAME = BASE_DIRECTORY + "gps" + str(uuid.uuid4()) + ".csv"
+    createCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS)
 
-	global PRESSURE_ARDUINO_FILENAME = BASE_DIRECTORY + "pressure" + str(uuid.uuid4()) + ".csv"
-	createCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS)
+    global PRESSURE_ARDUINO_FILENAME = BASE_DIRECTORY + "pressure" + str(uuid.uuid4()) + ".csv"
+    createCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS)
 
-	global GPIO_KEYS = BASE_DIRECTORY + 'gpio' + str(uuid.uuid4()) + .'.csv'
-	createCSV(GPIO_FILENAME, GPIO_KEYS)
+    global GPIO_KEYS = BASE_DIRECTORY + 'gpio' + str(uuid.uuid4()) + .'.csv'
+    createCSV(GPIO_FILENAME, GPIO_KEYS)
 
 
 def createCSV(filename, keys):
-	with open(filename, 'wb') as file:
-		dict_writer = csv.DictWriter(file, keys)
-		dict_writer.writeheader()
+    with open(filename, 'wb') as file:
+        dict_writer = csv.DictWriter(file, keys)
+        dict_writer.writeheader()
 
 def main():
-	createCSVs()
-	thread.start_new_thread(operateCamera, ())
-#	thread.start_new_thread(handleGenericArduinoSensor, ())
-#	thread.start_new_thread(handlePressureSensor, ())
-	thread.start_new_thread(handleRaspberryPiGPIO, ())
-#	thread.start_new_thread(handleGPSData, ())
-#	threading.Timer(60, sendToRadio).start()
+    createCSVs()
+    thread.start_new_thread(operateCamera, ())
+#   thread.start_new_thread(handleGenericArduinoSensor, ())
+#   thread.start_new_thread(handlePressureSensor, ())
+    thread.start_new_thread(handleRaspberryPiGPIO, ())
+#   thread.start_new_thread(handleGPSData, ())
+#   threading.Timer(60, sendToRadio).start()
 
 
 if __name__ == "__main__":
-	main();
+    main();
