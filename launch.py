@@ -32,7 +32,11 @@ GENERIC_ARDUINO_FILENAME = ''
 GENERIC_ARDUINO_KEYS = ['time', 'geiger_count']
 
 GPS_ARDUINO_FILENAME = ''
-GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction', 'lng', 'lng_direction', 'fix_quality', 'num_satelites','hdop', 'altitude', 'height_geoid_ellipsoid']
+GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction', 
+'lng', 'lng_direction', 'fix_quality', 'num_satelites','hdop', 'altitude', 'height_geoid_ellipsoid']
+
+PRESSURE_ARDUINO_FILENAME = ''
+PRESSURE_ARDUINO_KEYS = ['time', 'raw_exterior_pressure']
 
 
 def operateCamera():
@@ -90,10 +94,14 @@ def handleRaspberryPiGPIO():
 def sendToRadio():
 	pass
 
-def readPressureSensor():
-	pass
+def handlePressureSensor():
+	def pressureFunction(serialInput):
+		dictionaryRepresentaion = json.loads(serialInput)
+		pressure = dictionaryRepresentaion['raw_exterior_pressure']
+		addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'raw_exterior_pressure' : pressure})
 
-
+	handleSerialInput(pressureSerial, pressureFunction)
+		
 
 def addValueToCSV(filename, keys, dictionary):
 	dictionary = filteredDictionary(dictionary)
@@ -119,9 +127,13 @@ def createCSVs():
 	BASE_DIRECTORY = '/home/pi/Desktop/data/'
 
 	#create csv for geiger counter
-	GENERIC_ARDUINO_FILENAME = BASE_DIRECTORY + "arduino_one" + str(uuid.uuid4()) + ".csv"
-	GENERIC_ARDUINO_KEYS = ['time', 'geiger_count']
+	global GENERIC_ARDUINO_FILENAME = BASE_DIRECTORY + "arduino_one" + str(uuid.uuid4()) + ".csv"
 	createCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS)
+
+	global GPS_ARDUINO_FILENAME = BASE_DIRECTORY + "gps" + str(uuid.uuid4()) + ".csv"
+	createCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS)
+
+	global PRESSURE_ARDUINO_FILENAME = BASE_DIRECTORY + "pressure" + str(uuid.uuid4()) + ".csv"
 
 
 def createCSV(filename, keys):
@@ -132,9 +144,10 @@ def createCSV(filename, keys):
 def main():
 	createCSVs()
 	thread.start_new_thread(operateCamera, ())
-	thread.start_new_thread(external_arduino, ())
-	thread.start_new_thread(handleArduinoSensor, ())
+	thread.start_new_thread(handleGenericArduinoSensor, ())
+	thread.start_new_thread(handlePressureSensor, ())
 	thread.start_new_thread(handleRaspberryPiGPIO, ())
+	thread.start_new_thread(handleGPSData, ())
 	threading.Timer(60, sendToRadio).start()
 
 
