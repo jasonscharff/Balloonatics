@@ -10,7 +10,6 @@ import uuid
 #insert modules as needed
 import sys
 sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Sensors/Temperature")
-sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Sensors/magnetometer")\
 sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Camera")
 
 
@@ -22,9 +21,9 @@ from magnetometer import *
 #arduino links
 BAUD_RATE = 9600
 genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
-# radioSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
-# cutDownSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
-# pressureSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
+pressureSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
+radioSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
+gpsSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
 
 
 #filenames
