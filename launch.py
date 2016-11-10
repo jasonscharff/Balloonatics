@@ -175,7 +175,7 @@ def main():
    # thread.start_new_thread(operateCamera, ())
 #   thread.start_new_thread(handleGenericArduinoSensor, ())
 #   thread.start_new_thread(handlePressureSensor, ())
-	handleRaspberryPiGPIO()
+    handleRaspberryPiGPIO()
    # thread.start_new_thread(handleRaspberryPiGPIO, ())
 #   thread.start_new_thread(handleGPSData, ())
 #   threading.Timer(60, sendToRadio).start()
