@@ -102,7 +102,10 @@ def handleRaspberryPiGPIO():
 		time.sleep(1)
 
 def sendToRadio():
-	pass
+	#convert to json
+	jsonified = json.dumps(RADIO_DICTIONARY)
+	#send to radio which will beam down
+	radioSerial.write(jsonified)
 
 def handlePressureSensor():
 	def pressureFunction(serialInput):
