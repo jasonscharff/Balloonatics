@@ -116,7 +116,7 @@ def handlePressureSensor():
         
 
 def addValueToCSV(filename, keys, dictionary):
-    dictionary = filteredDictionary(dictionary)
+    dictionary = dictionary(dictionary)
     
     if filename in RADIO_DICTIONARY:
         array = RADIO_DICTIONARY[filename]
