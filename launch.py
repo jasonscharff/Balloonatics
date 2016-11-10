@@ -175,6 +175,7 @@ def main():
     thread.start_new_thread(operateCamera, ())
 #   thread.start_new_thread(handleGenericArduinoSensor, ())
 #   thread.start_new_thread(handlePressureSensor, ())
+#something needs to occupy the main thread.
     handleRaspberryPiGPIO()
    # thread.start_new_thread(handleRaspberryPiGPIO, ())
 #   thread.start_new_thread(handleGPSData, ())
