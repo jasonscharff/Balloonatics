@@ -41,6 +41,11 @@ PRESSURE_ARDUINO_KEYS = ['time', 'raw_exterior_pressure']
 GPIO_FILENAME = ''
 GPIO_KEYS = getTemperatureKeys()
 
+#radio
+#radio dictionary will be formatted with the name of the csv and then contain an array of dictionaries with of the last data
+#the dictionaries will contain timestamps.
+RADIO_DICTIONARY = {}
+
 
 def operateCamera():
 	while True:
@@ -110,6 +115,14 @@ def handlePressureSensor():
 
 def addValueToCSV(filename, keys, dictionary):
 	dictionary = filteredDictionary(dictionary)
+	
+	if filename in RADIO_DICTIONARY:
+		array = RADIO_DICTIONARY[filename]
+	else:
+		array = []
+	array.append(dictionary)
+	RADIO_DICTIONARY[filename] = array
+
 	with open(filename, 'a') as file:
     	writer = csv.DictWriter(file, keys)
         writer.writerow(dictionary)
