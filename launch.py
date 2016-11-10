@@ -149,16 +149,20 @@ def createCSVs():
     BASE_DIRECTORY = '/home/pi/Desktop/data/'
 
     #create csv for geiger counter
-    global GENERIC_ARDUINO_FILENAME = BASE_DIRECTORY + "arduino_one" + str(uuid.uuid4()) + ".csv"
+    global GENERIC_ARDUINO_FILENAME
+    GENERIC_ARDUINO_FILENAME = BASE_DIRECTORY + "arduino_one" + str(uuid.uuid4()) + ".csv"
     createCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS)
 
-    global GPS_ARDUINO_FILENAME = BASE_DIRECTORY + "gps" + str(uuid.uuid4()) + ".csv"
+    global GPS_ARDUINO_FILENAME
+    GPS_ARDUINO_FILENAME = BASE_DIRECTORY + "gps" + str(uuid.uuid4()) + ".csv"
     createCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS)
 
-    global PRESSURE_ARDUINO_FILENAME = BASE_DIRECTORY + "pressure" + str(uuid.uuid4()) + ".csv"
+    global PRESSURE_ARDUINO_FILENAME
+    PRESSURE_ARDUINO_FILENAME = BASE_DIRECTORY + "pressure" + str(uuid.uuid4()) + ".csv"
     createCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS)
 
-    global GPIO_KEYS = BASE_DIRECTORY + 'gpio' + str(uuid.uuid4()) + .'.csv'
+    global GPIO_KEYS
+    GPIO_KEYS = BASE_DIRECTORY + 'gpio' + str(uuid.uuid4()) + .'.csv'
     createCSV(GPIO_FILENAME, GPIO_KEYS)
 
 
