@@ -26,22 +26,61 @@ radioSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
 gpsSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
 
 
+
 #filenames
 GENERIC_ARDUINO_FILENAME = ''
 GENERIC_ARDUINO_KEYS = ['time', 'geiger_count']
+
+GPS_ARDUINO_FILENAME = ''
+GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction', 'lng', 'lng_direction', 'fix_quality', 'num_satelites','hdop', 'altitude', 'height_geoid_ellipsoid']
 
 
 def operateCamera():
 	while True:
 		takeVideo();
 
-def handleArduinoSensor():
+def handleSerialInput(serial, responseFunction):
 	while True:
-		serialInput = genericArduinoSerial.readline()
-		if(serialInput is not None and len(serialInput) > 0):
-			dictionaryRepresentaion = json.loads(serialInput)
-			geiger_value = dictionaryRepresentaion['geiger_cpm']
-			addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'geiger_cpm' : geiger_value})
+		serialInput = serial.readline()
+		if serialInput is not None and len(serialInput) > 0:
+			responseFunction(serialInput)
+
+def handleGenericArduinoSensor():
+	def genericArduinioFunction(serialInput):
+		dictionaryRepresentaion = json.loads(serialInput)
+		geiger_value = dictionaryRepresentaion['geiger_cpm']
+		addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'geiger_cpm' : geiger_value})
+
+	handleSerialInput(genericArduinoSerial, genericArduinioFunction)
+
+def handleGPSData():
+	def gpsHandler(string):
+		if string.startswith('$GPGGA'):
+			components = string.split(',')
+			gps_timestamp = components[1]
+			lat = components[2]
+			directionLat = components[3]
+			lng = components[4]
+			directionLng = components[5]
+			fix_quality = components[6]
+			num_satelites = components[7]
+			hdop = components[8]
+			altitude = components[9]
+			height_geoid_ellipsoid = components[11]
+			dictionary = {'gps_timestamp', gps_timestamp,
+						'lat' : lat,
+						'lat_direction' : directionLat,
+						'lng' : lng,
+						'lng_direction' : lng_direction,
+						'fix_quality' : fix_quality,
+						'num_satelites' : num_satelites,
+						'hdop' : hdop,
+						'altitude' : altitude,
+						'height_geoid_ellipsoid' : height_geoid_ellipsoid}
+			addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
+
+		handleSerialInput(gpsArduinoSerial, gpsHandler)
+
 
 
 def handleRaspberryPiGPIO():
