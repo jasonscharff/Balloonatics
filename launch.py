@@ -79,15 +79,15 @@ def handleGPSData():
 			hdop = components[8]
 			altitude = components[9]
 			height_geoid_ellipsoid = components[11]
-			dictionary = {'gps_timestamp', gps_timestamp, \
-						'lat' : lat, \
-						'lat_direction' : directionLat, \
-						'lng' : lng,\
-						'lng_direction' : lng_direction, \
-						'fix_quality' : fix_quality, \
-						'num_satelites' : num_satelites, \
-						'hdop' : hdop, \
-						'altitude' : altitude, \
+			dictionary = {'gps_timestamp': gps_timestamp, 
+						'lat' : lat, 
+						'lat_direction' : directionLat, 
+						'lng' : lng,
+						'lng_direction' : lng_direction, 
+						'fix_quality' : fix_quality, 
+						'num_satelites' : num_satelites, 
+						'hdop' : hdop, 
+						'altitude' : altitude, 
 						'height_geoid_ellipsoid' : height_geoid_ellipsoid}
 			addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
 
