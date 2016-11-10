@@ -160,8 +160,8 @@ def createCSVs():
     PRESSURE_ARDUINO_FILENAME = BASE_DIRECTORY + "pressure" + str(uuid.uuid4()) + ".csv"
     createCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS)
 
-    global GPIO_KEYS
-    GPIO_KEYS = BASE_DIRECTORY + 'gpio' + str(uuid.uuid4()) + '.csv'
+    global GPIO_FILENAME
+    GPIO_FILENAME = BASE_DIRECTORY + 'gpio' + str(uuid.uuid4()) + '.csv'
     createCSV(GPIO_FILENAME, GPIO_KEYS)
 
 
