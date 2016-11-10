@@ -38,6 +38,9 @@ GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction',
 PRESSURE_ARDUINO_FILENAME = ''
 PRESSURE_ARDUINO_KEYS = ['time', 'raw_exterior_pressure']
 
+GPIO_FILENAME = ''
+GPIO_KEYS = getTemperatureKeys()
+
 
 def operateCamera():
 	while True:
@@ -89,7 +92,9 @@ def handleGPSData():
 
 def handleRaspberryPiGPIO():
 	while True:
-		pass
+		tempDictionary = getTemperatureReadingJSON()
+		addValueToCSV(GPIO_FILENAME, GPIO_KEYS, tempDictionary)
+		time.sleep(1)
 
 def sendToRadio():
 	pass
@@ -134,6 +139,10 @@ def createCSVs():
 	createCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS)
 
 	global PRESSURE_ARDUINO_FILENAME = BASE_DIRECTORY + "pressure" + str(uuid.uuid4()) + ".csv"
+	createCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS)
+
+	global GPIO_KEYS = BASE_DIRECTORY + 'gpio' + str(uuid.uuid4()) + .'.csv'
+	createCSV(GPIO_FILENAME, GPIO_KEYS)
 
 
 def createCSV(filename, keys):
