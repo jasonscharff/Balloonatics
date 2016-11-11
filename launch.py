@@ -85,7 +85,7 @@ def handleGPSData():
                         'lat' : lat, 
                         'lat_direction' : directionLat, 
                         'lng' : lng,
-                        'lng_direction' : lng_direction, 
+                        'lng_direction' : directionLng, 
                         'fix_quality' : fix_quality, 
                         'num_satelites' : num_satelites, 
                         'hdop' : hdop, 
