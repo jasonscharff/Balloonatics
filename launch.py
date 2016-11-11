@@ -28,7 +28,7 @@ genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
 
 #filenames
 GENERIC_ARDUINO_FILENAME = ''
-GENERIC_ARDUINO_KEYS = ['time', 'geiger_count']
+GENERIC_ARDUINO_KEYS = ['time', 'geiger_cpm']
 
 GPS_ARDUINO_FILENAME = ''
 GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction', 
@@ -60,7 +60,7 @@ def handleGenericArduinoSensor():
     def genericArduinioFunction(serialInput):
         dictionaryRepresentaion = json.loads(serialInput)
         geiger_value = dictionaryRepresentaion['geiger_cpm']
-        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'geiger_cpm' : geiger_value})
+        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'' : geiger_value})
 
     handleSerialInput(genericArduinoSerial, genericArduinioFunction)
 
