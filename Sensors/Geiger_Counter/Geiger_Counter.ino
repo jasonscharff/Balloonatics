@@ -41,8 +41,10 @@ void loop() {
 void sendNumCounts(int numCounts) {
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  root["geiger_cpm"] = numCounts;
-  root.printTo(Serial);
+  root["geiger_cpm"] = (int)numCounts;
+  char buffer[256];
+  root.printTo(buffer, sizeof(buffer));
+  Serial.println(buffer);
 }
 
 
