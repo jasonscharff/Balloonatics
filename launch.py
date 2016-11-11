@@ -93,7 +93,7 @@ def handleGPSData():
                         'height_geoid_ellipsoid' : height_geoid_ellipsoid}
             addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
 
-        handleSerialInput(gpsArduinoSerial, gpsHandler)
+    handleSerialInput(gpsArduinoSerial, gpsHandler)
 
 
 
@@ -186,4 +186,4 @@ def main():
 #   threading.Timer(60, sendToRadio).start()
 
 
-#main()
+main()
