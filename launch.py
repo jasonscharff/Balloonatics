@@ -68,20 +68,20 @@ def handleGenericArduinoSensor():
 
 def handleGPSData():
     def gpsHandler(string):
-        print string
         if string.startswith('$GPGGA'):
             components = string.split(',')
-            gps_timestamp = components[1]
-            lat = components[2]
-            directionLat = components[3]
-            lng = components[4]
-            directionLng = components[5]
-            fix_quality = components[6]
-            num_satelites = components[7]
-            hdop = components[8]
-            altitude = components[9]
-            height_geoid_ellipsoid = components[11]
-            dictionary = {'gps_timestamp': gps_timestamp, 
+            if len(components) >= 12:
+                gps_timestamp = components[1]
+                lat = components[2]
+                directionLat = components[3]
+                lng = components[4]
+                directionLng = components[5]
+                fix_quality = components[6]
+                num_satelites = components[7]
+                hdop = components[8]
+                altitude = components[9]
+                height_geoid_ellipsoid = components[11]
+                dictionary = {'gps_timestamp': gps_timestamp, 
                         'lat' : lat, 
                         'lat_direction' : directionLat, 
                         'lng' : lng,
@@ -91,7 +91,7 @@ def handleGPSData():
                         'hdop' : hdop, 
                         'altitude' : altitude, 
                         'height_geoid_ellipsoid' : height_geoid_ellipsoid}
-            addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
+                addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
 
     handleSerialInput(gpsSerial, gpsHandler)
 
