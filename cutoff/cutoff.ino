@@ -1,15 +1,30 @@
-int pin = A1;
+#include <ArduinoJson.h>
+
+
+int cutoffPin = A1;
+int BAUD_RATE = 9600;
+
 
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(9600);
-  pinMode(pin, OUTPUT);
+  Serial.begin(BAUD_RATE);
+  pinMode(cutoffPin, OUTPUT);
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  analogWrite(pin, 255);
-  //delay(1000);
-  //analogWrite(pin, 0);
-  //delay(1000);
+  String raspberryPiInput = Serial.readString();
+  if (raspberryPiInput.length() > 0) {
+      StaticJsonBuffer<200> jsonBuffer;
+      JsonObject& root = jsonBuffer.parseObject(raspberryPiInput);
+      boolean shouldCut = root["altitudeReached"];
+      if(shouldCut) {
+        cutoff();
+      }
+  }
+  
 }
+
+void cutoff() {
+  analogWrite(cutoffPin, 255);
+}
+
