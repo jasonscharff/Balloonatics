@@ -19,7 +19,7 @@ from temperature import *
 
 #arduino links
 BAUD_RATE = 9600
-#genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
 #pressureSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
 #radioSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
 #gpsSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
@@ -28,7 +28,7 @@ BAUD_RATE = 9600
 
 #filenames
 GENERIC_ARDUINO_FILENAME = ''
-GENERIC_ARDUINO_KEYS = ['time', 'geiger_count']
+GENERIC_ARDUINO_KEYS = ['time', 'geiger_cpm']
 
 GPS_ARDUINO_FILENAME = ''
 GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction', 
@@ -52,15 +52,17 @@ def operateCamera():
 
 def handleSerialInput(serial, responseFunction):
     while True:
-        serialInput = serial.readline()
+        serialInput = str(serial.readline())
         if serialInput is not None and len(serialInput) > 0:
             responseFunction(serialInput)
 
 def handleGenericArduinoSensor():
     def genericArduinioFunction(serialInput):
+        serialInput = serialInput.replace('\r', '')
+        serialInput = serialInput.replace('\n', '')
         dictionaryRepresentaion = json.loads(serialInput)
         geiger_value = dictionaryRepresentaion['geiger_cpm']
-        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'geiger_cpm' : geiger_value})
+        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, dictionaryRepresentaion)
 
     handleSerialInput(genericArduinoSerial, genericArduinioFunction)
 
@@ -173,14 +175,14 @@ def createCSV(filename, keys):
 def main():
     createCSVs()
     thread.start_new_thread(operateCamera, ())
-#   thread.start_new_thread(handleGenericArduinoSensor, ())
+    thread.start_new_thread(handleGenericArduinoSensor, ())
 #   thread.start_new_thread(handlePressureSensor, ())
-#something needs to occupy the main thread.
+#something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
+   # handleGenericArduinoSensor()
    # thread.start_new_thread(handleRaspberryPiGPIO, ())
 #   thread.start_new_thread(handleGPSData, ())
 #   threading.Timer(60, sendToRadio).start()
 
 
-if __name__ == "__main__":
-    main();
+main()

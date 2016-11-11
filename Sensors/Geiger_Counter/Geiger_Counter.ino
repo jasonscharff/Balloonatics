@@ -4,8 +4,8 @@ int geigerCounterPin = A3;
 int geigerCount = 0;
 long currentTime;
 long prevTime;
-int numCounts = 0;
-int calibrationConstant = 0.49;
+double numCounts = 0;
+double calibrationConstant = 0.49;
 bool wasPreviouslyLow;
 int BAUD_RATE = 9600;
 
@@ -41,8 +41,10 @@ void loop() {
 void sendNumCounts(int numCounts) {
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  root["geiger_cpm"] = numCounts;
-  root.printTo(Serial);
+  root["geiger_cpm"] = String(numCounts);
+  char buffer[256];
+  root.printTo(buffer, sizeof(buffer));
+  Serial.println(buffer);
 }
 
 
