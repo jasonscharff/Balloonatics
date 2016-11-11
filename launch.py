@@ -52,7 +52,7 @@ def operateCamera():
 
 def handleSerialInput(serial, responseFunction):
     while True:
-        serialInput = str(serial.readline())
+        serialInput = str(serial.read())
         if serialInput is not None and len(serialInput) > 0:
             responseFunction(serialInput)
 
