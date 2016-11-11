@@ -19,7 +19,7 @@ from temperature import *
 
 #arduino links
 BAUD_RATE = 9600
-#genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
 #pressureSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
 #radioSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
 #gpsSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
@@ -173,9 +173,9 @@ def createCSV(filename, keys):
 def main():
     createCSVs()
     thread.start_new_thread(operateCamera, ())
-#   thread.start_new_thread(handleGenericArduinoSensor, ())
+    thread.start_new_thread(handleGenericArduinoSensor, ())
 #   thread.start_new_thread(handlePressureSensor, ())
-#something needs to occupy the main thread.
+#something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
    # thread.start_new_thread(handleRaspberryPiGPIO, ())
 #   thread.start_new_thread(handleGPSData, ())
