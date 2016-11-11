@@ -68,6 +68,7 @@ def handleGenericArduinoSensor():
 
 def handleGPSData():
     def gpsHandler(string):
+        print string
         if string.startswith('$GPGGA'):
             components = string.split(',')
             gps_timestamp = components[1]
@@ -185,4 +186,4 @@ def main():
 #   threading.Timer(60, sendToRadio).start()
 
 
-main()
+#main()
