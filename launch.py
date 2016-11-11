@@ -186,4 +186,4 @@ def main():
 #   threading.Timer(60, sendToRadio).start()
 
 
-main()
+#main()
