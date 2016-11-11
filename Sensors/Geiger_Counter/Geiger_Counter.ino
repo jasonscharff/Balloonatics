@@ -4,8 +4,8 @@ int geigerCounterPin = A3;
 int geigerCount = 0;
 long currentTime;
 long prevTime;
-int numCounts = 0;
-int calibrationConstant = 0.49;
+double numCounts = 0;
+double calibrationConstant = 0.49;
 bool wasPreviouslyLow;
 int BAUD_RATE = 9600;
 
