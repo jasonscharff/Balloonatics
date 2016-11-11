@@ -12,5 +12,6 @@ void loop()
   if (gpsSerial.available())
   {
     Serial.write(gpsSerial.read());
+    delay(5000);
   }
 }
