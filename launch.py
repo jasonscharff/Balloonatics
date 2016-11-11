@@ -186,5 +186,4 @@ def main():
 #   threading.Timer(60, sendToRadio).start()
 
 
-if __name__ == "__main__":
-    main()
+main()
