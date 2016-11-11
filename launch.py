@@ -58,6 +58,8 @@ def handleSerialInput(serial, responseFunction):
 
 def handleGenericArduinoSensor():
     def genericArduinioFunction(serialInput):
+        serialInput = serialInput.replace('\r', '')
+        serialInput = serialInput.replace('\n', '')
         dictionaryRepresentaion = json.loads(serialInput)
         geiger_value = dictionaryRepresentaion['geiger_cpm']
         addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'' : geiger_value})
