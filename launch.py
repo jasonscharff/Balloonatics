@@ -63,7 +63,7 @@ def handleGenericArduinoSensor():
         print serialInput
         dictionaryRepresentaion = json.loads(serialInput)
         geiger_value = dictionaryRepresentaion['geiger_cpm']
-        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {'' : geiger_value})
+        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, {geiger_value : geiger_value})
 
     handleSerialInput(genericArduinoSerial, genericArduinioFunction)
 
@@ -180,7 +180,7 @@ def main():
 #   thread.start_new_thread(handlePressureSensor, ())
 #something needs to occupy the main thread it appears from prelminary testong.
  #   handleRaspberryPiGPIO()
-    handleGenericArduinoSensor();
+    handleGenericArduinoSensor()
    # thread.start_new_thread(handleRaspberryPiGPIO, ())
 #   thread.start_new_thread(handleGPSData, ())
 #   threading.Timer(60, sendToRadio).start()
