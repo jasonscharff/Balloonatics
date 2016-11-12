@@ -115,9 +115,8 @@ def handlePressureSensor():
     def pressureFunction(serialInput):
         try:
             dictionaryRepresentaion = json.loads(serialInput)
-            addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_FILENAME, dictionaryRepresentaion)
+            addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
         except:
-            print 'exception found'
             pass
 
     handleSerialInput(pressureSerial, pressureFunction)
