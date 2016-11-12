@@ -1,3 +1,7 @@
+#include <ArduinoJson.h>
+
+const int BAUD_RATE = 9600;
+
 //range finder
 const int pwPin = 7;
 double pulse, inches, cm;
@@ -8,13 +12,13 @@ int pressure = A0;
 int pressvalue = 0;
 
 //cutoff
-int pin = A1;
+int cutoffPin = A1;
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(BAUD_RATE);
   analogReference(EXTERNAL);
-  pinMode(pin, OUTPUT);
+  pinMode(cutoffPin, OUTPUT);
 }
 
 void loop()
@@ -39,7 +43,15 @@ void loop()
   sendRawPressure(rawPressureValue);
 
   //send a signal to relay to trigger cutoff
-  analogWrite(pin, 255);
+  String raspberryPiInput = Serial.readString();
+  if (raspberryPiInput.length() > 0) {
+      StaticJsonBuffer<200> jsonBuffer;
+      JsonObject& root = jsonBuffer.parseObject(raspberryPiInput);
+      boolean shouldCut = root["altitudeReached"];
+      if(shouldCut) {
+        cutoff();
+      }
+  }
   
   delay(500);
 }
@@ -49,4 +61,8 @@ void sendRawPressure(int rawPressure) {
   JsonObject& root = jsonBuffer.createObject();
   root["raw_exterior_pressure"] = rawPressure;
   root.printTo(Serial);
+}
+
+void cutoff() {
+  analogWrite(cutoffPin, 255);
 }
