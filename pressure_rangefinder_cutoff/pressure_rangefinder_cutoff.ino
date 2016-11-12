@@ -63,7 +63,12 @@ void loop() {
   double pressure = bme.readPressure();
   double bme_altitude = bme.readAltitude(SEALEVELPRESSURE_HPA);
   double humidity = bme.readHumidity();
-  sendFrequentData(temperature,pressure,bme_altitude, humidity,cm);
+
+  int blueVoltage = analogRead(blue); // stores voltage read in from blue solar panel
+  int whiteVoltage = analogRead(white); // stores voltage read in from white solar panel
+  int redVoltage = analogRead(red);
+  
+  sendFrequentData(temperature,pressure,bme_altitude, humidity,cm, blueVoltage, whiteVoltage,redVoltage);
 
    long current_time = millis();
     //wait one second
@@ -79,7 +84,7 @@ void detectSignal() {
   }
 }
 
-void sendFrequentData(double temperature, double pressure, double bme_altitude, double humidity, double cm) {
+void sendFrequentData(double temperature, double pressure, double bme_altitude, double humidity, double cm, int blue, int white, int red) {
     StaticJsonBuffer<200> jsonBuffer;
     JsonObject& root = jsonBuffer.createObject();
     root["exterior_temperature"] = temperature;
@@ -87,6 +92,9 @@ void sendFrequentData(double temperature, double pressure, double bme_altitude, 
     root["exterior_pressure"] = double_with_n_digits(pressure, 5);
     root["estimated_altitude"] = bme_altitude;
     root["cm_distance"] = cm;
+    root["white_voltage"] = white;
+    root["red_voltage"] = red;
+    root["blue_voltage"] = blue;
     char buffer[256];
     root.printTo(buffer, sizeof(buffer));
     Serial.println(buffer);
