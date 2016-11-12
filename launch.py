@@ -49,6 +49,7 @@ RADIO_DICTIONARY = {}
 def operateCamera():
     while True:
         takeVideo();
+        takePhoto();
 
 def handleSerialInput(serial, responseFunction):
     while True:
