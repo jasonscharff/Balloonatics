@@ -1,6 +1,5 @@
 #include <ArduinoJson.h>
 
-
 int cutoffPin = A1;
 int BAUD_RATE = 9600;
 
