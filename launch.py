@@ -21,8 +21,8 @@ from temperature import *
 BAUD_RATE = 9600
 genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
 gpsSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
+radioSerial = serial.Serial('/dev/ttyACM2', 4800)
 #pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
-#radioSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
 
 
 
@@ -184,7 +184,7 @@ def main():
    # handleGenericArduinoSensor()
    # thread.start_new_thread(handleRaspberryPiGPIO, ())
     
-#   threading.Timer(60, sendToRadio).start()
+    threading.Timer(15, sendToRadio).start()
 
 
 main()
