@@ -111,9 +111,11 @@ def sendToRadio():
 
 def handlePressureSensor():
     def pressureFunction(serialInput):
-        print 'pressure input' + serialInput
-        dictionaryRepresentaion = json.loads(serialInput)
-        addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_FILENAME, dictionaryRepresentaion)
+        try:
+            dictionaryRepresentaion = json.loads(serialInput)
+            addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_FILENAME, dictionaryRepresentaion)
+        except:
+            pass
 
     handleSerialInput(pressureSerial, pressureFunction)
         
