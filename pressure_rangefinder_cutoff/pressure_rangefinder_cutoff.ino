@@ -8,9 +8,9 @@ const int BAUD_RATE = 9600;
 //range finder
 const int pwPin = 7;
 double pulse, inches, cm;
+int inchtime = 147.0;
+int cmconversion = 2.54;
 long time;
-
-double INCHES_TO_CM_CONVERSION_FACTOR = 2.54;
 
 //pressure sensor
 #define BME_SCK 13
@@ -20,9 +20,6 @@ double INCHES_TO_CM_CONVERSION_FACTOR = 2.54;
 
 #define SEALEVELPRESSURE_HPA (1013.25)
 
-
-
-
 //Adafruit_BME280 bme; // I2C
 Adafruit_BME280 bme(BME_CS); // hardware SPI
 //Adafruit_BME280 bme(BME_CS, BME_MOSI, BME_MISO,  BME_SCK);
@@ -30,32 +27,35 @@ Adafruit_BME280 bme(BME_CS); // hardware SPI
 //cutoff
 int cutoffPin = A1;
 
-//aaron individual
-int blue = A2;
-int white = A3;
-int red = A4;
-int blueVoltage = 0;
-int whiteVoltage = 0;
-int redVoltage = 0;
-
-
-
-void setup() {
+void setup()
+{
   Serial.begin(BAUD_RATE);
-  bme.begin();
+  Serial.println(F("BME280 test"));
+
+  if (!bme.begin()) {   
+     Serial.println("Could not find a valid BME280 sensor, check wiring!");
+     while (1);
+  }
+  
   pinMode(cutoffPin, OUTPUT);
-  pinMode(pwPin, INPUT);
 }
 
-void loop() {
+void loop()
+{
   //range finder data collection
+  pinMode(pwPin, INPUT);
   pulse = pulseIn(pwPin, HIGH);
   time = pulseIn(pwPin, HIGH);
-  inches = pulse/147.0;
-  cm = inches*INCHES_TO_CM_CONVERSION_FACTOR;
+  inches = pulse/inchtime;
+  cm = inches*cmconversion;
 
   Serial.print(inches);
+  Serial.print("in, ");
   Serial.print(cm);
+  Serial.print("cm, ");
+  Serial.print("Time:");
+  Serial.print(time);
+  Serial.println();
 
   //collect pressure, temperature, humidity sensor values
   Serial.print("T = ");
