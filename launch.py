@@ -1,4 +1,5 @@
 #python packages
+from __future__ import division
 import thread
 import threading
 import time
@@ -7,7 +8,6 @@ import serial
 import csv
 import uuid
 import math
-from __future__ import division
 
 #insert modules as needed
 import sys
