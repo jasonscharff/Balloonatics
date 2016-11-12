@@ -141,7 +141,7 @@ def getAltitudeFromPressure(pressure):
     pressure /= 100
     if pressure > 22.707:
         altitude = 44397.5-44388.3 * ((pressure/101.29) ** .19026)
-    else if pressure < 2.483:
+    elif pressure < 2.483:
         altitude = 72441.47 * ((pressure/2.488) ** -.0878) - 47454.96
     else:
         altitude = 11019.12 - 6369.43 * math.log(pressure/22.65)
