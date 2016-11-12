@@ -178,13 +178,14 @@ def main():
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
+    threading.Timer(15, sendToRadio).start()
 #   thread.start_new_thread(handlePressureSensor, ())
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
    # handleGenericArduinoSensor()
    # thread.start_new_thread(handleRaspberryPiGPIO, ())
     
-    threading.Timer(15, sendToRadio).start()
+    
 
 
 main()
