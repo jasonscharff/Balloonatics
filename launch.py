@@ -127,7 +127,7 @@ def handlePressureSensor():
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             pressure = dictionaryRepresentaion['exterior_pressure']
             altitude = getAltitudeFromPressure(pressure)
-            if altitude is not None and altitude > 0
+            if altitude is not None and altitude > 0:
                 if altitude > ALTITUDE_THRESHOLD:
                     NUM_TIMES_ALTITUDE_REACHED += 1
                 if NUM_TIMES_ALTITUDE_REACHED > 30:
