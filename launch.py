@@ -7,6 +7,7 @@ import serial
 import csv
 import uuid
 import math
+from __future__ import division
 
 #insert modules as needed
 import sys
@@ -20,9 +21,9 @@ from temperature import *
 
 #arduino links
 BAUD_RATE = 9600
-genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
-gpsSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
-pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
+#genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+gpsSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+#pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
 #radioSerial = serial.Serial('/dev/ttyACM3', 4800)
 
 
@@ -138,7 +139,7 @@ def handlePressureSensor():
 
 #pressure in pascals        
 def getAltitudeFromPressure(pressure):
-    pressure /= 100
+    pressure /= 1000
     if pressure > 22.707:
         altitude = 44397.5-44388.3 * ((pressure/101.29) ** .19026)
     elif pressure < 2.483:
@@ -205,9 +206,9 @@ def createCSV(filename, keys):
 def main():
     createCSVs()
     thread.start_new_thread(operateCamera, ())
-    thread.start_new_thread(handleGenericArduinoSensor, ())
+    #thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
-    thread.start_new_thread(handlePressureSensor, ())
+   # thread.start_new_thread(handlePressureSensor, ())
     #threading.Timer(15, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
