@@ -206,9 +206,9 @@ def createCSV(filename, keys):
 def main():
     createCSVs()
     thread.start_new_thread(operateCamera, ())
-    #thread.start_new_thread(handleGenericArduinoSensor, ())
+    thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
-   # thread.start_new_thread(handlePressureSensor, ())
+    thread.start_new_thread(handlePressureSensor, ())
     #threading.Timer(15, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
