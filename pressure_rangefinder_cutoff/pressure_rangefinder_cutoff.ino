@@ -9,7 +9,7 @@ const int BAUD_RATE = 9600;
 const int pwPin = 7;
 double pulse, inches, cm;
 long time;
-
+double INCHES_TIME = 147.0;
 double INCHES_TO_CM_CONVERSION_FACTOR = 2.54;
 
 //pressure sensor
@@ -51,7 +51,7 @@ void loop() {
   //range finder data collection
   pulse = pulseIn(pwPin, HIGH);
   time = pulseIn(pwPin, HIGH);
-  inches = pulse/147.0;
+  inches = pulse/INCHES_TIME;
   cm = inches*INCHES_TO_CM_CONVERSION_FACTOR;
 
   Serial.print(inches);
