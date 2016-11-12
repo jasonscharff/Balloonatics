@@ -58,11 +58,13 @@ def handleSerialInput(serial, responseFunction):
 
 def handleGenericArduinoSensor():
     def genericArduinioFunction(serialInput):
-        serialInput = serialInput.replace('\r', '')
-        serialInput = serialInput.replace('\n', '')
-        dictionaryRepresentaion = json.loads(serialInput)
-        geiger_value = dictionaryRepresentaion['geiger_cpm']
-        addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, dictionaryRepresentaion)
+        try:
+            serialInput = serialInput.replace('\r', '')
+            serialInput = serialInput.replace('\n', '')
+            dictionaryRepresentaion = json.loads(serialInput)
+            addValueToCSV(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, dictionaryRepresentaion)
+        except:
+            pass
 
     handleSerialInput(genericArduinoSerial, genericArduinioFunction)
 
@@ -112,10 +114,10 @@ def sendToRadio():
 def handlePressureSensor():
     def pressureFunction(serialInput):
         try:
-            print serialInput
             dictionaryRepresentaion = json.loads(serialInput)
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_FILENAME, dictionaryRepresentaion)
         except:
+            print 'exception found'
             pass
 
     handleSerialInput(pressureSerial, pressureFunction)
