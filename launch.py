@@ -20,9 +20,9 @@ from temperature import *
 #arduino links
 BAUD_RATE = 9600
 genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
-#pressureSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
-#radioSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
-#gpsSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
+gpsSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
+radioSerial = serial.Serial('/dev/ttyACM2', 4800)
+#pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
 
 
 
@@ -70,29 +70,30 @@ def handleGPSData():
     def gpsHandler(string):
         if string.startswith('$GPGGA'):
             components = string.split(',')
-            gps_timestamp = components[1]
-            lat = components[2]
-            directionLat = components[3]
-            lng = components[4]
-            directionLng = components[5]
-            fix_quality = components[6]
-            num_satelites = components[7]
-            hdop = components[8]
-            altitude = components[9]
-            height_geoid_ellipsoid = components[11]
-            dictionary = {'gps_timestamp': gps_timestamp, 
+            if len(components) >= 12:
+                gps_timestamp = components[1]
+                lat = components[2]
+                directionLat = components[3]
+                lng = components[4]
+                directionLng = components[5]
+                fix_quality = components[6]
+                num_satelites = components[7]
+                hdop = components[8]
+                altitude = components[9]
+                height_geoid_ellipsoid = components[11]
+                dictionary = {'gps_timestamp': gps_timestamp, 
                         'lat' : lat, 
                         'lat_direction' : directionLat, 
                         'lng' : lng,
-                        'lng_direction' : lng_direction, 
+                        'lng_direction' : directionLng, 
                         'fix_quality' : fix_quality, 
                         'num_satelites' : num_satelites, 
                         'hdop' : hdop, 
                         'altitude' : altitude, 
                         'height_geoid_ellipsoid' : height_geoid_ellipsoid}
-            addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
+                addValueToCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
 
-        handleSerialInput(gpsArduinoSerial, gpsHandler)
+    handleSerialInput(gpsSerial, gpsHandler)
 
 
 
@@ -176,13 +177,15 @@ def main():
     createCSVs()
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
+    thread.start_new_thread(handleGPSData, ())
+    threading.Timer(15, sendToRadio).start()
 #   thread.start_new_thread(handlePressureSensor, ())
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
    # handleGenericArduinoSensor()
    # thread.start_new_thread(handleRaspberryPiGPIO, ())
-#   thread.start_new_thread(handleGPSData, ())
-#   threading.Timer(60, sendToRadio).start()
+    
+    
 
 
 main()
