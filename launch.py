@@ -51,6 +51,15 @@ RADIO_DICTIONARY = {}
 NUM_TIMES_ALTITUDE_REACHED = 0
 ALTITUDE_THRESHOLD = 30000 #in m
 
+#pressure
+NUM_TIMES_PRESSURE_REACHED = 0
+PRESSURE_THRESHOLD = 98750 #in Pa
+
+#time
+startTime = time.time();
+currentTime = time.time();
+TIME_THRESHOLD = 3600;
+
 CUTOFF_SIGNAL = 'c'
 
 
@@ -127,15 +136,19 @@ def handlePressureSensor():
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             pressure = dictionaryRepresentaion['exterior_pressure']
             altitude = getAltitudeFromPressure(pressure)
-            if altitude is not None and altitude > 0:
-                if altitude > ALTITUDE_THRESHOLD:
-                    NUM_TIMES_ALTITUDE_REACHED += 1
-                if NUM_TIMES_ALTITUDE_REACHED > 30:
+            if pressure is not None and pressure > 0:
+                if pressure > PRESSURE_THRESHOLD:
+                    NUM_TIMES_PRESSURE_REACHED += 1
+                if NUM_TIMES_PRESSURE_REACHED > 30:
                     pressureSerial.write(CUTOFF_SIGNAL)
         except:
             pass
 
     handleSerialInput(pressureSerial, pressureFunction)
+
+def backupTrigger():
+	if(currentTime - startTime > TIME_THRESHOLD):
+		pressureSerial.write(CUTOFF_SIGNAL)
 
 #pressure in pascals        
 def getAltitudeFromPressure(pressure):
@@ -227,6 +240,7 @@ def openSerial():
 
 def main():
     openSerial();
+    currentTime = time.time();
     createCSVs()
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
