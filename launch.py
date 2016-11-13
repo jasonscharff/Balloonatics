@@ -15,7 +15,7 @@ sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Sensors/Temperature")
 sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Camera")
 
 
-from camera import *
+#from camera import *
 from temperature import *
 
 
