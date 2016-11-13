@@ -147,7 +147,7 @@ def handlePressureSensor():
 def backupTrigger():
 	if(currentTime - startTime > TIME_THRESHOLD):
 		pressureSerial.write(CUTOFF_SIGNAL)
-	currentTime = time.time();
+	currentTime = time.time()
 
 #pressure in pascals        
 def getAltitudeFromPressure(pressure):
