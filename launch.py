@@ -204,6 +204,10 @@ def createCSV(filename, keys):
         dict_writer.writeheader()
 
 def openSerial():
+    global genericArduinoSerial
+    global gpsSerial
+    global pressureSerial
+    
     while genericArduinoSerial == None:
         try:
             genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
