@@ -55,9 +55,9 @@ NUM_TIMES_PRESSURE_REACHED = 0
 PRESSURE_THRESHOLD = 98750 #in Pa
 
 #time
-startTime = time.time();
-currentTime = time.time();
-TIME_THRESHOLD = 3600; #one hour in seconds
+startTime = time.time()
+currentTime = time.time()
+TIME_THRESHOLD = 3600 #one hour in seconds
 
 CUTOFF_SIGNAL = 'c'
 
