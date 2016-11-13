@@ -25,6 +25,7 @@ BAUD_RATE = 9600
 genericArduinoSerial = None
 gpsSerial = None
 pressureSerial = None
+radioSerial = None
 
 
 
@@ -117,8 +118,9 @@ def handleRaspberryPiGPIO():
 def sendToRadio():
     #convert to json
     jsonified = json.dumps(RADIO_DICTIONARY)
-    #send to radio which will beam down
-    radioSerial.write(jsonified)
+    #hope one of the 1000 times works.
+    for i in xrange(0,1000):
+        radioSerial.write(jsonified)
 
 def handlePressureSensor():
     def pressureFunction(serialInput):
@@ -207,6 +209,7 @@ def openSerial():
     global genericArduinoSerial
     global gpsSerial
     global pressureSerial
+    global radioSerial
     
     while genericArduinoSerial == None:
         try:
@@ -224,6 +227,11 @@ def openSerial():
             pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
         except:
             pressureSerial = None
+    while radioSerial == None:
+        try:
+            radioSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
+        except:
+            radioSerial = None
 
 def main():
     openSerial();
@@ -232,7 +240,7 @@ def main():
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
-    #threading.Timer(15, sendToRadio).start()
+    threading.Timer(60, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
    # 
