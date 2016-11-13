@@ -78,8 +78,8 @@ void loop() {
 }
 
 void detectSignal() {
-   char piInput = Serial.read();
-  if (piInput == CUTOFF_SIGNAL) {
+  char piInput = Serial.read();
+  if (piInput == 'c') {
     cutoff();
   }
 }
