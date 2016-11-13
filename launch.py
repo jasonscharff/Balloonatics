@@ -55,7 +55,6 @@ NUM_TIMES_PRESSURE_REACHED = 0
 PRESSURE_THRESHOLD = 98750 #in Pa
 
 #time
-startTime = time.time()
 currentTime = time.time()
 TIME_THRESHOLD = 3600 #one hour in seconds
 
@@ -239,13 +238,14 @@ def openSerial():
 
 def main():
     openSerial();
-    startTime = time.time();
+    global startTime
+    startTime = time.time()
     createCSVs()
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
-    thread.start_new_thread(backupTrigger, ())
+    threading.Timer(300, backupTrigger).start()
     #threading.Timer(15, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
