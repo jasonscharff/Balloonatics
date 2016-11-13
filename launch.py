@@ -15,7 +15,7 @@ sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Sensors/Temperature")
 sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Camera")
 
 
-#from camera import *
+from camera import *
 from temperature import *
 
 
@@ -23,7 +23,7 @@ from temperature import *
 BAUD_RATE = 9600
 genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
 gpsSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
-#pressureSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
+pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
 #radioSerial = serial.Serial('/dev/ttyACM3', 4800)
 
 
@@ -205,10 +205,10 @@ def createCSV(filename, keys):
 
 def main():
     createCSVs()
-    #thread.start_new_thread(operateCamera, ())
+    thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
-   # thread.start_new_thread(handlePressureSensor, ())
+    thread.start_new_thread(handlePressureSensor, ())
     #threading.Timer(15, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
