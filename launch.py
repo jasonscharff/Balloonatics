@@ -211,35 +211,35 @@ def openSerial():
     global pressureSerial
     global radioSerial
     
-    while genericArduinoSerial == None:
-        try:
-            genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
-        except:
-            genericArduinoSerial = None
+    # while genericArduinoSerial == None:
+    #     try:
+    #         genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+    #     except:
+    #         genericArduinoSerial = None
 
     while gpsSerial == None:
         try:
-            gpsSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
+            gpsSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
         except:
             gpsSerial = None
-    while pressureSerial == None:
-        try:
-            pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
-        except:
-            pressureSerial = None
-    while radioSerial == None:
-        try:
-            radioSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
-        except:
-            radioSerial = None
+    # while pressureSerial == None:
+    #     try:
+    #         pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
+    #     except:
+    #         pressureSerial = None
+    # while radioSerial == None:
+    #     try:
+    #         radioSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
+    #     except:
+    #         radioSerial = None
 
 def main():
     openSerial();
     createCSVs()
     thread.start_new_thread(operateCamera, ())
-    thread.start_new_thread(handleGenericArduinoSensor, ())
+   # thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
-    thread.start_new_thread(handlePressureSensor, ())
+    #thread.start_new_thread(handlePressureSensor, ())
     threading.Timer(60, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
