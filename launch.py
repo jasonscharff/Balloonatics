@@ -27,7 +27,6 @@ gpsSerial = None
 pressureSerial = None
 
 
-
 #filenames
 GENERIC_ARDUINO_FILENAME = ''
 GENERIC_ARDUINO_KEYS = ['time', 'geiger_cpm']
@@ -58,7 +57,7 @@ PRESSURE_THRESHOLD = 98750 #in Pa
 #time
 startTime = time.time();
 currentTime = time.time();
-TIME_THRESHOLD = 3600;
+TIME_THRESHOLD = 3600; #one hour in seconds
 
 CUTOFF_SIGNAL = 'c'
 
@@ -135,8 +134,7 @@ def handlePressureSensor():
             dictionaryRepresentaion = json.loads(serialInput)
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             pressure = dictionaryRepresentaion['exterior_pressure']
-            altitude = getAltitudeFromPressure(pressure)
-            if pressure is not None and pressure > 0:
+            if pressure is not None:
                 if pressure > PRESSURE_THRESHOLD:
                     NUM_TIMES_PRESSURE_REACHED += 1
                 if NUM_TIMES_PRESSURE_REACHED > 30:
@@ -149,6 +147,7 @@ def handlePressureSensor():
 def backupTrigger():
 	if(currentTime - startTime > TIME_THRESHOLD):
 		pressureSerial.write(CUTOFF_SIGNAL)
+	currentTime = time.time();
 
 #pressure in pascals        
 def getAltitudeFromPressure(pressure):
@@ -240,12 +239,13 @@ def openSerial():
 
 def main():
     openSerial();
-    currentTime = time.time();
+    startTime = time.time();
     createCSVs()
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
+    thread.start_new_thread(backupTrigger, ())
     #threading.Timer(15, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
