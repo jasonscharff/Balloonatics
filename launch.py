@@ -22,6 +22,10 @@ from temperature import *
 #arduino links
 BAUD_RATE = 9600
 
+genericArduinoSerial = None
+gpsSerial = None
+pressureSerial = None
+
 
 
 #filenames
