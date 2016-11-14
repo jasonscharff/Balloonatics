@@ -84,14 +84,14 @@ void detectSignal() {
   }
 }
 
-void sendFrequentData(double temperature, double pressure, double bme_altitude, double humidity, double cm, int blue, int white, int red) {
+void sendFrequentData(double temperature, double pressure, double bme_altitude, double humidity, double rangeFinderTime, int blue, int white, int red) {
     StaticJsonBuffer<200> jsonBuffer;
     JsonObject& root = jsonBuffer.createObject();
     root["exterior_temperature"] = temperature;
     root["exterior_humidity"] = humidity;
     root["exterior_pressure"] = double_with_n_digits(pressure, 5);
     root["estimated_altitude"] = bme_altitude;
-    root["cm_distance"] = cm;
+    root["sound_time"] = time;
     root["white_voltage"] = white;
     root["red_voltage"] = red;
     root["blue_voltage"] = blue;
