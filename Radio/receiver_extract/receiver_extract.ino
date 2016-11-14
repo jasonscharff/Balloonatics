@@ -3,8 +3,8 @@
 char inString[INLENGTH+1];
 int inCount;
 String s;
-String STARTER = "qNb4";
-String ENDER = "j5st";
+String STARTER = "qNb4d5tR1q";
+String ENDER = "j5st6w1rvU";
 String NULL_TOKEN = "0000";
 
 void setup()
@@ -25,7 +25,7 @@ void loop()
   inString[inCount] = 0;
   s = String(inString);
   s = extract(STARTER,ENDER,s);
-  if (s == NULL_TOKEN)
+  if (s = NULL_TOKEN)
   {
     Serial.println("No Message");
   }
