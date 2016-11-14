@@ -57,7 +57,7 @@ PRESSURE_THRESHOLD = 98750 #in Pa
 
 #time
 currentTime = time.time()
-TIME_THRESHOLD = 3600 #one hour in seconds
+TIME_THRESHOLD = 300 #5 minute in seconds.
 
 CUTOFF_SIGNAL = 'c'
 
