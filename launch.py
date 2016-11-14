@@ -147,6 +147,7 @@ def handlePressureSensor():
     handleSerialInput(pressureSerial, pressureFunction)
 
 def backupTrigger():
+	global currentTime
 	if(currentTime - startTime > TIME_THRESHOLD):
 		pressureSerial.write(CUTOFF_SIGNAL)
 	currentTime = time.time()
