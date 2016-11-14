@@ -25,14 +25,7 @@ void loop()
   inString[inCount] = 0;
   s = String(inString);
   s = extract(STARTER,ENDER,s);
-  if (s = NULL_TOKEN)
-  {
-    Serial.println("No Message");
-  }
-  else
-  {
-    Serial.println(s);
-  }
+  Serial.println(s);
 }
 
 String extract(String starter, String ender, String s)
@@ -82,7 +75,7 @@ String extract(String starter, String ender, String s)
   }
   if (s.substring(startPos,endPos).length() < 2)
   {
-    return NULL_TOKEN;
+    return s.substring(startPos,endPos);
   }
   else
   {
