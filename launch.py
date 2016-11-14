@@ -57,7 +57,7 @@ PRESSURE_THRESHOLD = 98750 #in Pa
 
 #time
 currentTime = time.time()
-TIME_THRESHOLD = 300 #5 minute in seconds.
+TIME_THRESHOLD = 3600 #1 hour
 
 CUTOFF_SIGNAL = 'c'
 
@@ -128,6 +128,7 @@ def sendToRadio():
     #hope one of the 1000 times works.
     for i in xrange(0,1000):
         radioSerial.write(jsonified)
+    threading.Timer(5, sendToRadio).start()
 
 def handlePressureSensor():
     def pressureFunction(serialInput):
@@ -149,6 +150,7 @@ def backupTrigger():
 	if(currentTime - startTime > TIME_THRESHOLD):
 		pressureSerial.write(CUTOFF_SIGNAL)
 	currentTime = time.time()
+	threading.Timer(5, backupTrigger).start()
 
 #pressure in pascals        
 def getAltitudeFromPressure(pressure):
@@ -240,7 +242,7 @@ def openSerial():
             pressureSerial = None
     while radioSerial == None:
         try:
-            radioSerial = serial.Serial('/dev/ttyACM3', BAUD_RATE)
+            radioSerial = serial.Serial('/dev/ttyACM3', 4800)
         except:
             radioSerial = None
 
