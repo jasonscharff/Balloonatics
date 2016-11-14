@@ -37,7 +37,7 @@ GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction',
 'lng', 'lng_direction', 'fix_quality', 'num_satelites','hdop', 'altitude', 'height_geoid_ellipsoid']
 
 PRESSURE_ARDUINO_FILENAME = ''
-PRESSURE_ARDUINO_KEYS = ['time', 'exterior_pressure', 'exterior_humidity', 'exterior_temperature', 'estimated_altitude', 'cm_distance','blue_voltage', 'red_voltage', 'white_voltage']
+PRESSURE_ARDUINO_KEYS = ['time', 'exterior_pressure', 'exterior_humidity', 'exterior_temperature', 'estimated_altitude', 'sound_time','blue_voltage', 'red_voltage', 'white_voltage']
 
 GPIO_FILENAME = ''
 GPIO_KEYS = getTemperatureKeys()
