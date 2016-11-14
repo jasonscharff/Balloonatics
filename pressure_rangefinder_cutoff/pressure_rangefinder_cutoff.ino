@@ -102,4 +102,6 @@ void sendFrequentData(double temperature, double pressure, double bme_altitude, 
 
 void cutoff() {
   analogWrite(cutoffPin, 255);
+  delay(1000);
+  analogWrite(cutoffPin, 0);
 }
