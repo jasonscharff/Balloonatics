@@ -28,7 +28,6 @@ pressureSerial = None
 radioSerial = None
 
 
-
 #filenames
 GENERIC_ARDUINO_FILENAME = ''
 GENERIC_ARDUINO_KEYS = ['time', 'geiger_cpm']
@@ -51,6 +50,14 @@ RADIO_DICTIONARY = {}
 #altitude
 NUM_TIMES_ALTITUDE_REACHED = 0
 ALTITUDE_THRESHOLD = 30000 #in m
+
+#pressure
+NUM_TIMES_PRESSURE_REACHED = 0
+PRESSURE_THRESHOLD = 98750 #in Pa
+
+#time
+currentTime = time.time()
+TIME_THRESHOLD = 3600 #one hour in seconds
 
 CUTOFF_SIGNAL = 'c'
 
@@ -128,16 +135,20 @@ def handlePressureSensor():
             dictionaryRepresentaion = json.loads(serialInput)
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             pressure = dictionaryRepresentaion['exterior_pressure']
-            altitude = getAltitudeFromPressure(pressure)
-            if altitude is not None and altitude > 0:
-                if altitude > ALTITUDE_THRESHOLD:
-                    NUM_TIMES_ALTITUDE_REACHED += 1
-                if NUM_TIMES_ALTITUDE_REACHED > 30:
+            if pressure is not None:
+                if pressure > PRESSURE_THRESHOLD:
+                    NUM_TIMES_PRESSURE_REACHED += 1
+                if NUM_TIMES_PRESSURE_REACHED > 30:
                     pressureSerial.write(CUTOFF_SIGNAL)
         except:
             pass
 
     handleSerialInput(pressureSerial, pressureFunction)
+
+def backupTrigger():
+	if(currentTime - startTime > TIME_THRESHOLD):
+		pressureSerial.write(CUTOFF_SIGNAL)
+	currentTime = time.time()
 
 #pressure in pascals        
 def getAltitudeFromPressure(pressure):
@@ -235,11 +246,14 @@ def openSerial():
 
 def main():
     openSerial();
+    global startTime
+    startTime = time.time()
     createCSVs()
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
+    threading.Timer(300, backupTrigger).start()
     threading.Timer(60, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
