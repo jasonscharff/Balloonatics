@@ -127,7 +127,7 @@ def sendToRadio():
     jsonified = json.dumps(RADIO_DICTIONARY)
     #hope one of the 1000 times works.
     for i in xrange(0,1000):
-        radioSerial.write(jsonified)
+        radioSerial.write(jsonified + '\n')
     threading.Timer(5, sendToRadio).start()
 
 def handlePressureSensor():
