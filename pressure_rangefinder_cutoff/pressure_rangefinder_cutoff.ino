@@ -11,7 +11,7 @@ const int BAUD_RATE = 9600;
 //range finder
 const int pwPin = 7;
 double pulse;
-long time;
+long rangeFinderTime;
 double CM_TIME = 57.874;
 
 //pressure sensor
@@ -55,7 +55,7 @@ void loop() {
   detectSignal();
   //range finder data collection
   pulse = pulseIn(pwPin, HIGH);
-  time = pulseIn(pwPin, HIGH);
+  rangeFinderTime = pulseIn(pwPin, HIGH);
   double cm = pulse/CM_TIME;
 
   //bme280
@@ -68,7 +68,7 @@ void loop() {
   int whiteVoltage = analogRead(white); // stores voltage read in from white solar panel
   int redVoltage = analogRead(red);
   
-  sendFrequentData(temperature,pressure,bme_altitude, humidity,cm, blueVoltage, whiteVoltage,redVoltage);
+  sendFrequentData(temperature,pressure,bme_altitude, humidity,rangeFinderTime, blueVoltage, whiteVoltage,redVoltage);
 
    long current_time = millis();
     //wait one second
@@ -84,14 +84,14 @@ void detectSignal() {
   }
 }
 
-void sendFrequentData(double temperature, double pressure, double bme_altitude, double humidity, double cm, int blue, int white, int red) {
+void sendFrequentData(double temperature, double pressure, double bme_altitude, double humidity, double rangeFinderTime, int blue, int white, int red) {
     StaticJsonBuffer<200> jsonBuffer;
     JsonObject& root = jsonBuffer.createObject();
     root["exterior_temperature"] = temperature;
     root["exterior_humidity"] = humidity;
     root["exterior_pressure"] = double_with_n_digits(pressure, 5);
     root["estimated_altitude"] = bme_altitude;
-    root["cm_distance"] = cm;
+    root["sound_time"] = rangeFinderTime;
     root["white_voltage"] = white;
     root["red_voltage"] = red;
     root["blue_voltage"] = blue;
