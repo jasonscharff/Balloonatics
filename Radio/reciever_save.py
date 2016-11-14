@@ -1,5 +1,5 @@
 BASE_DIRECTORY = '/users/jasonscharff/Documents/ASR_Balloonatics/'
-BAUD_RATE = 9600
+BAUD_RATE = 4800
 import serial
 import uuid
 import time
