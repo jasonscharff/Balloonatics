@@ -57,7 +57,7 @@ PRESSURE_THRESHOLD = 98750 #in Pa
 
 #time
 currentTime = time.time()
-TIME_THRESHOLD = 300 #5 minute in seconds.
+TIME_THRESHOLD = 60 #5 minute in seconds.
 
 CUTOFF_SIGNAL = 'c'
 
@@ -253,8 +253,8 @@ def main():
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
-    threading.Timer(300, backupTrigger).start()
-    threading.Timer(60, sendToRadio).start()
+    threading.Timer(5, backupTrigger).start()
+    threading.Timer(5, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
     
