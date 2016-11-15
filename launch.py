@@ -270,10 +270,11 @@ def main():
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
-    thread.start_new_thread(handlePressureSensor, ())
+    handlePressureSensor()
+   # thread.start_new_thread(handlePressureSensor, ())
     threading.Timer(60, sendToRadio).start()
     #something needs to occupy the main thread
-    handleRaspberryPiGPIO()
+   # handleRaspberryPiGPIO()
     
    
     
