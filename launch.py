@@ -57,7 +57,7 @@ PRESSURE_THRESHOLD = 98750 #in Pa
 
 #time
 currentTime = time.time()
-TIME_THRESHOLD = 3600 #1 hour
+TIME_THRESHOLD = 30 #1 hour
 
 CUTOFF_SIGNAL = 'c'
 
@@ -148,10 +148,14 @@ def handlePressureSensor():
 
 def backupTrigger():
 	global currentTime
+	sent = False
 	if(currentTime - startTime > TIME_THRESHOLD):
-		pressureSerial.write(CUTOFF_SIGNAL)
+		sent = True
+		for i in xrange(0,100):
+			pressureSerial.write(CUTOFF_SIGNAL)
 	currentTime = time.time()
-	threading.Timer(5, backupTrigger).start()
+	if sent == False:
+		threading.Timer(5, backupTrigger).start()
 
 #pressure in pascals        
 def getAltitudeFromPressure(pressure):
@@ -256,7 +260,7 @@ def main():
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
-    threading.Timer(300, backupTrigger).start()
+    threading.Timer(5, backupTrigger).start()
     threading.Timer(60, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
