@@ -130,8 +130,8 @@ def sendToRadio():
     threading.Timer(5, sendToRadio).start()
 
 def handlePressureSensor():
-    global last_pressure_samples
     def pressureFunction(serialInput):
+        global last_pressure_samples
         try:
             dictionaryRepresentaion = json.loads(serialInput)
             pressure = dictionaryRepresentaion['exterior_pressure'] 
@@ -141,13 +141,11 @@ def handlePressureSensor():
             if pressure is not None and pressure > 0:
                 last_pressure_samples.append(pressure)
                 length = len(last_pressure_samples)
-                print length
                 if length > NUM_PRESSURE_SAMPLES:
                     last_pressure_samples = last_pressure_samples[NUM_PRESSURE_SAMPLES-length:]
                     average = reduce(lambda x, y: x + y, last_pressure_samples) / length
                     print average
                     if average < PRESSURE_THRESHOLD:
-                        print 'go time'
                         cutdown()
         except:
             pass
@@ -270,11 +268,10 @@ def main():
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
-    handlePressureSensor()
-   # thread.start_new_thread(handlePressureSensor, ())
+    thread.start_new_thread(handlePressureSensor, ())
     threading.Timer(60, sendToRadio).start()
     #something needs to occupy the main thread
-   # handleRaspberryPiGPIO()
+    handleRaspberryPiGPIO()
     
    
     
