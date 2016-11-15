@@ -130,7 +130,7 @@ def sendToRadio():
     threading.Timer(5, sendToRadio).start()
 
 def handlePressureSensor():
-	global last_pressure_samples
+    global last_pressure_samples
     def pressureFunction(serialInput):
         try:
             dictionaryRepresentaion = json.loads(serialInput)
@@ -139,13 +139,13 @@ def handlePressureSensor():
             dictionary['exterior_pressure'] = pressure * (0.9 ** (time.time()-start_time))
             pressure = dictionary['exterior_pressure']
             if pressure is not None and pressure > 0:
-            	last_pressure_samples.append(pressure)
-            	length = len(last_pressure_samples)
-            	if length > NUM_PRESSURE_SAMPLES:
-            		last_pressure_samples = last_pressure_samples[NUM_PRESSURE_SAMPLES-length:]
-            		average = reduce(lambda x, y: x + y, last_pressure_samples) / length
-            		if average < PRESSURE_THRESHOLD:
-            			cutdown()
+                last_pressure_samples.append(pressure)
+                length = len(last_pressure_samples)
+                if length > NUM_PRESSURE_SAMPLES:
+                    last_pressure_samples = last_pressure_samples[NUM_PRESSURE_SAMPLES-length:]
+                    average = reduce(lambda x, y: x + y, last_pressure_samples) / length
+                    if average < PRESSURE_THRESHOLD:
+                        cutdown()
         except:
             pass
 
@@ -153,17 +153,17 @@ def handlePressureSensor():
 
 
 def cutdown():
-	global has_cut_down
-	current_time = time.time()
-	if has_cut_down == False:
-		if current_time - start_time > TIME_THRESHOLD:
-			#send the signal a bunch of times. Safe > Sorry.
-			has_cut_down = True
-			for i in xrange(0,100):
-				pressureSerial.write(CUTOFF_SIGNAL)
-			filename =  BASE_DIRECTORY + 'cutdown' + str(uuid.uuid4()) + '.txt'
-    		with open(filename, 'w') as file:
-        		file.write('CUTDOWN AT: ' + str(time.time()))
+    global has_cut_down
+    current_time = time.time()
+    if has_cut_down == False:
+        if current_time - start_time > TIME_THRESHOLD:
+            #send the signal a bunch of times. Safe > Sorry.
+            has_cut_down = True
+            for i in xrange(0,100):
+                pressureSerial.write(CUTOFF_SIGNAL)
+            filename =  BASE_DIRECTORY + 'cutdown' + str(uuid.uuid4()) + '.txt'
+            with open(filename, 'w') as file:
+                file.write('CUTDOWN AT: ' + str(time.time()))
 
 
 #pressure in pascals        
@@ -207,7 +207,7 @@ def filterCSVDictionary(keys, dictionary):
 
 
 def createCSVs():
-	global BASE_DIRECTORY
+    global BASE_DIRECTORY
     #create csv for geiger counter
     global GENERIC_ARDUINO_FILENAME
     GENERIC_ARDUINO_FILENAME = BASE_DIRECTORY + "arduino_one" + str(uuid.uuid4()) + ".csv"
@@ -269,7 +269,7 @@ def main():
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
     threading.Timer(60, sendToRadio).start()
-	#something needs to occupy the main thread
+    #something needs to occupy the main thread
     handleRaspberryPiGPIO()
     
    
