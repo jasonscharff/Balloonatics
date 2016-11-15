@@ -54,9 +54,9 @@ void loop() {
 
   detectSignal();
   //range finder data collection
-  pulse = pulseIn(pwPin, HIGH);
-  rangeFinderTime = pulseIn(pwPin, HIGH);
-  double cm = pulse/CM_TIME;
+ // pulse = pulseIn(pwPin, HIGH);
+ // rangeFinderTime = pulseIn(pwPin, HIGH);
+ // double cm = pulse/CM_TIME;
 
   //bme280
   double temperature = bme.readTemperature();
@@ -64,9 +64,9 @@ void loop() {
   double bme_altitude = bme.readAltitude(SEALEVELPRESSURE_HPA);
   double humidity = bme.readHumidity();
 
-  int blueVoltage = analogRead(blue); // stores voltage read in from blue solar panel
-  int whiteVoltage = analogRead(white); // stores voltage read in from white solar panel
-  int redVoltage = analogRead(red);
+ // int blueVoltage = analogRead(blue); // stores voltage read in from blue solar panel
+ // int whiteVoltage = analogRead(white); // stores voltage read in from white solar panel
+ // int redVoltage = analogRead(red);
   
   sendFrequentData(temperature,pressure,bme_altitude, humidity,rangeFinderTime, blueVoltage, whiteVoltage,redVoltage);
 
