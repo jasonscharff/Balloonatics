@@ -149,8 +149,9 @@ def handlePressureSensor():
             			cutdown()
         except:
             pass
+   	handleSerialInput(pressureSerial, pressureFunction)
 
-    handleSerialInput(pressureSerial, pressureFunction)
+    	
 
 
 def cutdown():
