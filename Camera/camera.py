@@ -9,12 +9,12 @@ BASE_DIRECTORY = '/home/pi/Desktop/'
 
 def takePhoto():
 	directory = BASE_DIRECTORY + 'photos/'
-	image_name = str(uuid.uuid1()) + '.jpg'
+	image_name = str(time.time()) + "_" + str(uuid.uuid1()) + '.jpg'
 	camera.capture(directory + image_name)
 
 def takeVideo():
 	directory = BASE_DIRECTORY + 'videos/'
-	video_name = str(uuid.uuid1()) + '.h264'
+	video_name = str(time.time()) + '_' + str(uuid.uuid1()) + '.h264'
 	camera.start_recording(directory + video_name)
 	time.sleep(300)
 	camera.stop_recording()
