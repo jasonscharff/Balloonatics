@@ -134,10 +134,10 @@ def handlePressureSensor():
     def pressureFunction(serialInput):
         try:
             dictionaryRepresentaion = json.loads(serialInput)
-            addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             pressure = dictionaryRepresentaion['exterior_pressure'] 
             dictionary['exterior_pressure'] = pressure * (0.9 ** (time.time()-start_time))
             pressure = dictionary['exterior_pressure']
+            addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             if pressure is not None and pressure > 0:
                 last_pressure_samples.append(pressure)
                 length = len(last_pressure_samples)
