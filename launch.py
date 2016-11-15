@@ -263,7 +263,7 @@ def main():
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
     threading.Timer(60, sendToRadio).start()
-#something needs to occupy the main thread it appears from prelminary testong.
+	#something needs to occupy the main thread
     handleRaspberryPiGPIO()
     
    
