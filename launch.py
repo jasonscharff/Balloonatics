@@ -51,7 +51,7 @@ RADIO_DICTIONARY = {}
 
 #pressure/cutdown
 last_pressure_samples = []
-NUM_PRESSURE_SAMPLES = 60
+NUM_PRESSURE_SAMPLES = 3
 PRESSURE_THRESHOLD = 1560 #in Pa
 has_cut_down = False
 
