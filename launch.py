@@ -136,6 +136,7 @@ def handlePressureSensor():
         try:
             dictionaryRepresentaion = json.loads(serialInput)
             pressure = dictionary['exterior_pressure']
+            print pressure
             dictionary['exterior_pressure'] = pressure * (0.9 ** (time.time()-start_time))
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             pressure = dictionaryRepresentaion['exterior_pressure']
