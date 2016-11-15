@@ -27,6 +27,8 @@ gpsSerial = None
 pressureSerial = None
 radioSerial = None
 
+#file location
+BASE_DIRECTORY = '/home/pi/Desktop/data/'
 
 #filenames
 GENERIC_ARDUINO_FILENAME = ''
@@ -157,6 +159,9 @@ def cutdown():
 			has_cut_down = True
 			for i in xrange(0,100):
 				pressureSerial.write(CUTOFF_SIGNAL)
+			filename =  BASE_DIRECTORY + 'cutdown' + str(uuid.uuid4()) + '.txt'
+    		with open(filename, 'w') as file:
+        		file.write('CUTDOWN AT: ' + str(time.time()))
 
 
 #pressure in pascals        
@@ -200,8 +205,7 @@ def filterCSVDictionary(keys, dictionary):
 
 
 def createCSVs():
-    BASE_DIRECTORY = '/home/pi/Desktop/data/'
-
+	global BASE_DIRECTORY
     #create csv for geiger counter
     global GENERIC_ARDUINO_FILENAME
     GENERIC_ARDUINO_FILENAME = BASE_DIRECTORY + "arduino_one" + str(uuid.uuid4()) + ".csv"
