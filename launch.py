@@ -131,9 +131,11 @@ def sendToRadio():
 
 def handlePressureSensor():
 	global last_pressure_samples
+	global start_time
     def pressureFunction(serialInput):
         try:
             dictionaryRepresentaion = json.loads(serialInput)
+            dictionary['exterior_pressure'] = 101325 * (0.5 ** (time.time()-start_time))
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             pressure = dictionaryRepresentaion['exterior_pressure']
             if pressure is not None and pressure > 0:
