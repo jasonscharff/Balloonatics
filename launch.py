@@ -47,18 +47,15 @@ GPIO_KEYS = getTemperatureKeys()
 #the dictionaries will contain timestamps.
 RADIO_DICTIONARY = {}
 
-#altitude
-NUM_TIMES_ALTITUDE_REACHED = 0
-ALTITUDE_THRESHOLD = 30000 #in m
-
-#pressure
-NUM_TIMES_PRESSURE_REACHED = 0
+#pressure/cutdown
+last_pressure_samples = []
+NUM_PRESSURE_SAMPLES = 60
 PRESSURE_THRESHOLD = 98750 #in Pa
+has_cut_down = False
 
 #time
-currentTime = time.time()
-TIME_THRESHOLD = 30 #1 hour
-
+start_time = None
+TIME_THRESHOLD = 3600 #1 hour
 CUTOFF_SIGNAL = 'c'
 
 
@@ -131,32 +128,36 @@ def sendToRadio():
     threading.Timer(5, sendToRadio).start()
 
 def handlePressureSensor():
+	global last_pressure_samples
     def pressureFunction(serialInput):
         try:
             dictionaryRepresentaion = json.loads(serialInput)
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
             pressure = dictionaryRepresentaion['exterior_pressure']
-            if pressure is not None:
-                if pressure > PRESSURE_THRESHOLD:
-                    NUM_TIMES_PRESSURE_REACHED += 1
-                if NUM_TIMES_PRESSURE_REACHED > 30:
-                    pressureSerial.write(CUTOFF_SIGNAL)
+            if pressure is not None and pressure > 0:
+            	last_pressure_samples.append(pressure)
+            	length = len(last_pressure_samples)
+            	if length > NUM_PRESSURE_SAMPLES:
+            		last_pressure_samples = last_pressure_samples[NUM_PRESSURE_SAMPLES-length:]
+            		average = reduce(lambda x, y: x + y, last_pressure_samples) / length
+            		if average < PRESSURE_THRESHOLD:
+            			cutdown()
         except:
             pass
 
     handleSerialInput(pressureSerial, pressureFunction)
 
-def backupTrigger():
-	global currentTime
-	sent = False
-	if(currentTime - startTime > TIME_THRESHOLD):
-		sent = True
-		for i in xrange(0,100):
-			print 'cut down now'
-			pressureSerial.write(CUTOFF_SIGNAL)
-	currentTime = time.time()
-	if sent == False:
-		threading.Timer(5, backupTrigger).start()
+
+def cutdown():
+	global has_cut_down
+	current_time = time.time()
+	if has_cut_down == False:
+		if current_time - start_time > TIME_THRESHOLD:
+			#send the signal a bunch of times. Safe > Sorry.
+			has_cut_down = True
+			for i in xrange(0,100):
+				pressureSerial.write(CUTOFF_SIGNAL)
+
 
 #pressure in pascals        
 def getAltitudeFromPressure(pressure):
@@ -254,14 +255,13 @@ def openSerial():
 
 def main():
     openSerial();
-    global startTime
-    startTime = time.time()
+    global start_time
+    start_time = time.time()
     createCSVs()
     thread.start_new_thread(operateCamera, ())
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
-    threading.Timer(5, backupTrigger).start()
     threading.Timer(60, sendToRadio).start()
 #something needs to occupy the main thread it appears from prelminary testong.
     handleRaspberryPiGPIO()
