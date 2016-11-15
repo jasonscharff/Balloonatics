@@ -152,6 +152,7 @@ def backupTrigger():
 	if(currentTime - startTime > TIME_THRESHOLD):
 		sent = True
 		for i in xrange(0,100):
+			print 'cut down now'
 			pressureSerial.write(CUTOFF_SIGNAL)
 	currentTime = time.time()
 	if sent == False:
