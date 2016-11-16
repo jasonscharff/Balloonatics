@@ -57,7 +57,7 @@ has_cut_down = False
 
 #time
 start_time = None
-TIME_THRESHOLD = 3600 #1 hour
+TIME_THRESHOLD = 1 #1 hour
 CUTOFF_SIGNAL = 'c'
 
 
@@ -146,6 +146,7 @@ def handlePressureSensor():
                     average = reduce(lambda x, y: x + y, last_pressure_samples) / length
                     print average
                     if average < PRESSURE_THRESHOLD:
+                        print 'cutdown'
                         cutdown()
         except:
             pass
