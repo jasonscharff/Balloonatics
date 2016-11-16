@@ -51,7 +51,7 @@ RADIO_DICTIONARY = {}
 
 #pressure/cutdown
 last_pressure_samples = []
-NUM_PRESSURE_SAMPLES = 3
+NUM_PRESSURE_SAMPLES = 60
 PRESSURE_THRESHOLD = 1560 #in Pa
 has_cut_down = False
 
@@ -133,18 +133,16 @@ def handlePressureSensor():
     def pressureFunction(serialInput):
         global last_pressure_samples
         try:
+            global has_cut_down
             dictionaryRepresentaion = json.loads(serialInput)
             pressure = dictionaryRepresentaion['exterior_pressure'] 
-            dictionaryRepresentaion['exterior_pressure'] = pressure * (0.9 ** (time.time()-start_time))
-            pressure = dictionaryRepresentaion['exterior_pressure']
             addValueToCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS, dictionaryRepresentaion)
-            if pressure is not None and pressure > 0:
+            if pressure is not None and pressure > 0 and has_cut_down == False:
                 last_pressure_samples.append(pressure)
                 length = len(last_pressure_samples)
                 if length > NUM_PRESSURE_SAMPLES:
                     last_pressure_samples = last_pressure_samples[NUM_PRESSURE_SAMPLES-length:]
                     average = reduce(lambda x, y: x + y, last_pressure_samples) / length
-                    print average
                     if average < PRESSURE_THRESHOLD:
                         cutdown()
         except:
