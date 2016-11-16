@@ -124,6 +124,7 @@ def handleRaspberryPiGPIO():
 def sendToRadio():
     #convert to json
     jsonified = json.dumps(RADIO_DICTIONARY)
+    print jsonified
     #hope one of the 1000 times works.
     for i in xrange(0,1000):
         radioSerial.write(jsonified + '\n')
@@ -267,7 +268,7 @@ def main():
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
-    threading.Timer(60, sendToRadio).start()
+    threading.Timer(5, sendToRadio).start()
     #something needs to occupy the main thread
     handleRaspberryPiGPIO()
     
