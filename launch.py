@@ -146,7 +146,6 @@ def handlePressureSensor():
                     average = reduce(lambda x, y: x + y, last_pressure_samples) / length
                     print average
                     if average < PRESSURE_THRESHOLD:
-                        print 'cutdown'
                         cutdown()
         except:
             pass
