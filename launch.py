@@ -124,7 +124,7 @@ def handleRaspberryPiGPIO():
 def sendToRadio():
     #convert to json
     jsonified = json.dumps(RADIO_DICTIONARY)
-    print jsonified
+    print 'radio string ' + jsonified
     #hope one of the 1000 times works.
     for i in xrange(0,1000):
         radioSerial.write(jsonified + '\n')
