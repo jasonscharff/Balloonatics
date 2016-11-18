@@ -3,6 +3,8 @@ import time
 import uuid
 camera = PiCamera()
 
+camera.resolution(1280, 720)
+
 BASE_DIRECTORY = '/home/pi/Desktop/'
 
 #take a picture and save it
