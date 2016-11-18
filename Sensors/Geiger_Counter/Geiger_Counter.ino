@@ -1,47 +1,71 @@
 #include <ArduinoJson.h>
 
+//Geiger
 int geigerCounterPin = A3;
 int geigerCount = 0;
+double numGeigerCounts = 0;
+double calibrationConstant = 0.49;
+bool wasGeigerPreviouslyLow;
+
+//Timing
 long currentTime;
 long prevTime;
-double numCounts = 0;
-double calibrationConstant = 0.49;
-bool wasPreviouslyLow;
+
+//Transfer
 int BAUD_RATE = 9600;
+
+//Anemometer
+bool wasAnemometerPreviouslyLow;
+const int anemometerPin = 7;
+int anemometerRPM = 0;
 
 void setup() {
   Serial.begin(BAUD_RATE);
   pinMode(geigerCounterPin, INPUT);
+  pinMode(anemometerPin, INPUT);
   currentTime = millis();
   prevTime = millis();
-  wasPreviouslyLow = !analogRead(geigerCounterPin);
+  wasGeigerPreviouslyLow = !analogRead(geigerCounterPin);
+  wasAnemometerPreviouslyLow = !analogRead(anemometerPin);
 }
 
 void loop() {
-  while (currentTime < 60000) {
+  if (currentTime < 60000) {
     geigerCount = analogRead(geigerCounterPin);
-    if (geigerCount == HIGH && wasPreviouslyLow == true) {
-      wasPreviouslyLow = false;
-      numCounts++;
+    if (geigerCount == HIGH && wasGeigerPreviouslyLow == true) {
+      wasGeigerPreviouslyLow = false;
+      numGeigerCounts++;
     }
     else if (geigerCount == LOW) {
-      wasPreviouslyLow = true;
+      wasGeigerPreviouslyLow = true;
     }
+    int anemometer = analogRead(anemometerPin);
+      if(anemometer == HIGH && wasAnemometerPreviouslyLow == true) {
+      wasAnemometerPreviouslyLow = false;
+      anemometerRPM++;
+     } 
+    else if(anemometer == LOW) {
+      wasAnemometerPreviouslyLow = true;
+    }
+    
     currentTime = millis() - prevTime;
-  }
-  numCounts = numCounts * calibrationConstant;
-  sendNumCounts(numCounts);
+  } else {
+    numGeigerCounts = numGeigerCounts * calibrationConstant;
+    sendData(numGeigerCounts, anemometerRPM);
 
-  numCounts = 0;
-  currentTime = 0;
-  prevTime = millis();
+    numGeigerCounts = 0;
+    currentTime = 0;
+    prevTime = millis();
+  }
+
 }
 
 
-void sendNumCounts(int numCounts) {
+void sendData(int geigerCount, int rpm) {
   StaticJsonBuffer<200> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
-  root["geiger_cpm"] = String(numCounts);
+  root["geiger_cpm"] = geigerCount;
+  root["anemometer_rpm"] = rpm;
   char buffer[256];
   root.printTo(buffer, sizeof(buffer));
   Serial.println(buffer);

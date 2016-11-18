@@ -31,7 +31,7 @@ BASE_DIRECTORY = '/home/pi/Desktop/data/'
 
 #filenames
 GENERIC_ARDUINO_FILENAME = ''
-GENERIC_ARDUINO_KEYS = ['time', 'geiger_cpm']
+GENERIC_ARDUINO_KEYS = ['time', 'geiger_cpm', 'anemometer_rpm']
 
 GPS_ARDUINO_FILENAME = ''
 GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction', 
