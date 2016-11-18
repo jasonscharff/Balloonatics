@@ -25,7 +25,6 @@ BAUD_RATE = 9600
 genericArduinoSerial = None
 gpsSerial = None
 pressureSerial = None
-radioSerial = None
 
 #file location
 BASE_DIRECTORY = '/home/pi/Desktop/data/'
@@ -44,10 +43,6 @@ PRESSURE_ARDUINO_KEYS = ['time', 'exterior_pressure', 'exterior_humidity', 'exte
 GPIO_FILENAME = ''
 GPIO_KEYS = getTemperatureKeys()
 
-#radio
-#radio dictionary will be formatted with the name of the csv and then contain an array of dictionaries with of the last data
-#the dictionaries will contain timestamps.
-RADIO_DICTIONARY = {}
 
 #pressure/cutdown
 last_pressure_samples = []
@@ -121,14 +116,6 @@ def handleRaspberryPiGPIO():
         addValueToCSV(GPIO_FILENAME, GPIO_KEYS, tempDictionary)
         time.sleep(1)
 
-def sendToRadio():
-    #convert to json
-    jsonified = json.dumps(RADIO_DICTIONARY)
-    #hope one of the 1000 times works.
-    for i in xrange(0,1000):
-        radioSerial.write(jsonified + '\n')
-    threading.Timer(5, sendToRadio).start()
-
 def handlePressureSensor():
     def pressureFunction(serialInput):
         global last_pressure_samples
@@ -179,14 +166,6 @@ def getAltitudeFromPressure(pressure):
 def addValueToCSV(filename, keys, dictionary):
     dictionary = filterCSVDictionary(keys, dictionary)
     
-    if filename in RADIO_DICTIONARY:
-        array = RADIO_DICTIONARY[filename]
-    else:
-        array = []
-
-    array.append(dictionary)
-    RADIO_DICTIONARY[filename] = array
-    
     with open(filename, 'a') as file:
         writer = csv.DictWriter(file, keys)
         writer.writerow(dictionary)
@@ -234,7 +213,6 @@ def openSerial():
     global genericArduinoSerial
     global gpsSerial
     global pressureSerial
-    global radioSerial
     
     while genericArduinoSerial == None:
         try:
@@ -252,11 +230,6 @@ def openSerial():
             pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
         except:
             pressureSerial = None
-    while radioSerial == None:
-        try:
-            radioSerial = serial.Serial('/dev/ttyACM3', 4800)
-        except:
-            radioSerial = None
 
 def main():
     openSerial();
@@ -267,7 +240,6 @@ def main():
     thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
     thread.start_new_thread(handlePressureSensor, ())
-    threading.Timer(5, sendToRadio).start()
     #something needs to occupy the main thread
     handleRaspberryPiGPIO()
     
