@@ -4,7 +4,6 @@
 int geigerCounterPin = A3;
 int geigerCount = 0;
 double numGeigerCounts = 0;
-double calibrationConstant = 0.49;
 bool wasGeigerPreviouslyLow;
 
 //Timing
@@ -50,7 +49,6 @@ void loop() {
     
     currentTime = millis() - prevTime;
   } else {
-    numGeigerCounts = numGeigerCounts * calibrationConstant;
     sendData(numGeigerCounts, anemometerRPM);
 
     numGeigerCounts = 0;
