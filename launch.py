@@ -52,7 +52,7 @@ has_cut_down = False
 
 #time
 start_time = None
-TIME_THRESHOLD = 1 #1 hour
+TIME_THRESHOLD = 3600 #1 hour
 CUTOFF_SIGNAL = 'c'
 
 
