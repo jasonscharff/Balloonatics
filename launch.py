@@ -145,7 +145,7 @@ def cutdown():
         if current_time - start_time > TIME_THRESHOLD:
             #send the signal a bunch of times. Safe > Sorry.
             has_cut_down = True
-            for i in xrange(0,100):
+            for i in xrange(0,20):
                 pressureSerial.write(CUTOFF_SIGNAL)
             filename =  BASE_DIRECTORY + 'cutdown' + str(uuid.uuid4()) + '.txt'
             with open(filename, 'w') as file:
