@@ -1,19 +1,30 @@
+#import ADAFruit BME280 python library.
 from Adafruit_BME280 import *
-import json
+#import time module to add timestamp to reading
 import time
 
+#create sensor object.
 sensor = BME280(mode=BME280_OSAMPLE_8)
 
-def getTemperatureReadingJSON():
+#function to return a reading from the interior temperature sensor as a dictionary
+def get_temperature_reading_json():
+	#read the temperature in degrees celsius
 	degrees = sensor.read_temperature()
+	#read the pressure in pascals
 	pascals = sensor.read_pressure()
+	#read the humidity in percentage form
 	humidity = sensor.read_humidity()
+
+	#create a dictioanry object from the data and add the current timestamp
 	dictionary = {"temperature" : degrees,
 				  "pressure" : pascals,
 				  "humidity" : humidity,
 				  "time" : time.time()}
 
+	#return a dictionary of the data.
 	return dictionary
 
-def getTemperatureKeys():
+#function to return keys used in the reading dictionary to allow data to be saved as a CSV.
+def get_temperature_keys():
+	#returns a python list of the keys used in the dictionary returned by get_temperature_reading_json
 	return ['temperature', 'pressure', 'humidity', 'time']
