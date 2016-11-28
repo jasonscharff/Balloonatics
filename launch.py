@@ -226,7 +226,7 @@ def handle_pressure_sensor():
                 #if the length is greater than the max we want to trim down the array
                 if length > NUM_PRESSURE_SAMPLES:
                     #trim down last_pressure_samples to cap length at NUM_PRESSURE_SAMPLES 
-                    last_pressure_sampes = last_pressure_samples[NUM_PRESSURE_SAMPLES-length:]
+                    last_pressure_samples = last_pressure_samples[NUM_PRESSURE_SAMPLES-length:]
                     #get average of last_pressure_samples
                     average = reduce(lambda x, y: x + y, last_pressure_samples) / length
                     #if the average of the last NUM_PRESSURE_SAMPLES > threshold we want to cutdown.
