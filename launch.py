@@ -220,26 +220,26 @@ def openSerial():
     #     except:
     #         genericArduinoSerial = None
 
-    # while gpsSerial == None:
-    #     try:
-    #         gpsSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
-    #     except:
-    #         gpsSerial = None
-    while pressureSerial == None:
+    while gpsSerial == None:
         try:
-            pressureSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+            gpsSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
         except:
-            pressureSerial = None
+            gpsSerial = None
+    # while pressureSerial == None:
+    #     try:
+    #         pressureSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+    #     except:
+    #         pressureSerial = None
 
 def main():
     openSerial();
     global start_time
     start_time = time.time()
     createCSVs()
-    thread.start_new_thread(operateCamera, ())
-    thread.start_new_thread(handleGenericArduinoSensor, ())
+   # thread.start_new_thread(operateCamera, ())
+  #  thread.start_new_thread(handleGenericArduinoSensor, ())
     thread.start_new_thread(handleGPSData, ())
-    thread.start_new_thread(handlePressureSensor, ())
+   # thread.start_new_thread(handlePressureSensor, ())
     #something needs to occupy the main thread
     handleRaspberryPiGPIO()
     
