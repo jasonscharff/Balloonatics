@@ -214,20 +214,20 @@ def openSerial():
     global gpsSerial
     global pressureSerial
     
-    while genericArduinoSerial == None:
-        try:
-            genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
-        except:
-            genericArduinoSerial = None
+    # while genericArduinoSerial == None:
+    #     try:
+    #         genericArduinoSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
+    #     except:
+    #         genericArduinoSerial = None
 
-    while gpsSerial == None:
-        try:
-            gpsSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
-        except:
-            gpsSerial = None
+    # while gpsSerial == None:
+    #     try:
+    #         gpsSerial = serial.Serial('/dev/ttyACM1', BAUD_RATE)
+    #     except:
+    #         gpsSerial = None
     while pressureSerial == None:
         try:
-            pressureSerial = serial.Serial('/dev/ttyACM2', BAUD_RATE)
+            pressureSerial = serial.Serial('/dev/ttyACM0', BAUD_RATE)
         except:
             pressureSerial = None
 
