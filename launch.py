@@ -344,7 +344,7 @@ def create_csvs():
     GPS_ARDUINO_FILENAME = BASE_DIRECTORY + "gps" + str(uuid.uuid4()) + ".csv"
 
     #call a function to actually create the gps csv.
-    createCSV(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS)
+    create_csv(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS)
 
 
     #use global pressure arduino filename to avoid creating a new instance variable
@@ -355,7 +355,7 @@ def create_csvs():
     PRESSURE_ARDUINO_FILENAME = BASE_DIRECTORY + "pressure" + str(uuid.uuid4()) + ".csv"
 
     #call a function to actually create the pressure csv.
-    createCSV(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS)
+    create_csv(PRESSURE_ARDUINO_FILENAME, PRESSURE_ARDUINO_KEYS)
 
 
     #use global gpio data (interior temperature only) filename to avoid creating a new instance variable
@@ -366,7 +366,7 @@ def create_csvs():
     GPIO_FILENAME = BASE_DIRECTORY + 'gpio' + str(uuid.uuid4()) + '.csv'
 
     #call a function to actually create the gpio csv.
-    createCSV(GPIO_FILENAME, GPIO_KEYS)
+    create_csv(GPIO_FILENAME, GPIO_KEYS)
 
 
 #function to create a csv with a given filename and keys
