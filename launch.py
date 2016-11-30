@@ -296,7 +296,7 @@ def add_value_to_csv(filename, keys, dictionary):
 #csv dictionaries should contain timestamp.
 #arg keys, final keys that should be used in the return dictionary
 #arg dictionary, original dictionary to filter
-def filter_csv_Dictionary(keys, dictionary):
+def filter_csv_dictionary(keys, dictionary):
     #create new dictionary which will be returned
     filtered_dictionary = {}
     #iterate through each key in the expected keys dictionary
