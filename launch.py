@@ -125,7 +125,7 @@ def handle_geiger_sensor():
             dictionary_representaion = json.loads(serial_input)
             #add the json serialzied dictionary onto the appropriate csv.
             add_value_to_csv(GEIGER_ARDUINO_FILENAME, GEIGER_ARDUINO_KEYS, dictionary_representaion)
-        #exception thrown––likely from converting to json.
+        #exception thrown, likely from converting to json.
         except:
             #just ignore this data point. Not much we can do.
             pass
