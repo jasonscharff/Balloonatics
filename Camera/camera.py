@@ -17,7 +17,7 @@ camera.resolution = (1280, 720)
 BASE_DIRECTORY = '/home/pi/Desktop/'
 
 #function to take a picture and save it
-def takePhoto():
+def take_photo():
 	#directory of photos is BASE + folder called photos
 	#if the folder doesn't exist an exception will be thrown so this should exist.
 	directory = BASE_DIRECTORY + 'photos/'
@@ -28,7 +28,7 @@ def takePhoto():
 
 #function to take 5 minute video and save it
 #will thus take 5 minutes to return.
-def takeVideo():
+def take_video():
 	#directory of photos is BASE + folder called videos
 	#if the folder doesn't exist an exception will be thrown so this should exist.
 	directory = BASE_DIRECTORY + 'videos/'

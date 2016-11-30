@@ -170,9 +170,9 @@ def handle_gps_data():
                 #create a dictionary of the GPS data in order to add it to the csv
                 dictionary = {'gps_timestamp': gps_timestamp, 
                         'lat' : lat, 
-                        'lat_direction' : directionLat, 
+                        'lat_direction' : direction_lat, 
                         'lng' : lng,
-                        'lng_direction' : directionLng, 
+                        'lng_direction' : direction_lng, 
                         'fix_quality' : fix_quality, 
                         'num_satelites' : num_satelites, 
                         'hdop' : hdop, 
