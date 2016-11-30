@@ -124,7 +124,7 @@ def handle_geiger_sensor():
             #convert json input into a python dictionary object
             dictionary_representaion = json.loads(serial_input)
             #add the json serialzied dictionary onto the appropriate csv.
-            add_value_to_csv(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS, dictionary_representaion)
+            add_value_to_csv(GEIGER_ARDUINO_FILENAME, GEIGER_ARDUINO_KEYS, dictionary_representaion)
         #exception thrown––likely from converting to json.
         except:
             #just ignore this data point. Not much we can do.
@@ -254,7 +254,7 @@ def cutdown():
             #send the signal a bunch of times to be safe
             for i in xrange(0,20):
                 #write the cutoff signal over serial to the arduino containing the cutoff mechanism.
-                pressureSerial.write(CUTOFF_SIGNAL)
+                pressure_serial.write(CUTOFF_SIGNAL)
             #create a file to log the time of the cutdown
             filename =  BASE_DIRECTORY + 'cutdown' + str(uuid.uuid4()) + '.txt'
             #open the newly created file
@@ -332,7 +332,7 @@ def create_csvs():
     GEIGER_ARDUINO_FILENAME = BASE_DIRECTORY + "geiger" + str(uuid.uuid4()) + ".csv"
 
     #call a function to actually create the geiger csv.
-    create_csv(GENERIC_ARDUINO_FILENAME, GENERIC_ARDUINO_KEYS)
+    create_csv(GEIGER_ARDUINO_FILENAME, GEIGER_ARDUINO_KEYS)
 
     #create csv for gps data
 
@@ -442,7 +442,7 @@ def main():
     create_csvs()
 
     #start taking photos/video on a new thread.
-    thread.start_new_thread(operateCamera, ())
+    thread.start_new_thread(operate_camera, ())
 
     #start getting data from the geiger sensor arduino on a new thread
     thread.start_new_thread(handle_geiger_sensor, ())

@@ -1,9 +1,14 @@
+//Import the Adafruit BME280 library.
 #include <Adafruit_BME280.h>
 
-#include <ArduinoJson.h>
-#include <Wire.h>
+//Import library to allow interfacing with SPI––a dependency of Adafruit's BME280 library
 #include <SPI.h>
+//Import standard Adafruit Sensor library––a dependency of Adafruit's BME280 library.
 #include <Adafruit_Sensor.h>
+
+//Import the Arduino JSON library to be able to send data to raspberry pi in JSON format.
+#include <ArduinoJson.h>
+
 
 
 const int BAUD_RATE = 9600;
