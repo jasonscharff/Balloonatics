@@ -432,26 +432,26 @@ def open_serial():
 def main():
     #open serial connections to each of the arduinos. 
     #this function will not return until all the serials are found.    
-    open_serial();
+   # open_serial();
     #tell python to use the global variable start_time instead of creating a new local variable.
-    global start_time
+   # global start_time
     #declare the global variable start time to the current time (which is the start time as data collection is about to begin)
-    start_time = time.time()
+   # start_time = time.time()
 
     #create csv files to store the data
     create_csvs()
 
     #start taking photos/video on a new thread.
-    thread.start_new_thread(operate_camera, ())
+   # thread.start_new_thread(operate_camera, ())
 
     #start getting data from the geiger sensor arduino on a new thread
-    thread.start_new_thread(handle_geiger_sensor, ())
+   # thread.start_new_thread(handle_geiger_sensor, ())
 
     #start getting data from the gps on a new thread.
-    thread.start_new_thread(handle_gps_data, ())
+   # thread.start_new_thread(handle_gps_data, ())
 
     #start getting data from the pressure arduino on a new thread
-    thread.start_new_thread(handle_pressure_sensor, ())
+   # thread.start_new_thread(handle_pressure_sensor, ())
 
     #start collecting data from sensors attached to the GPIO pins (the interior temperature sensor)
     #something needs to be occupying the main thread for the program to not return
