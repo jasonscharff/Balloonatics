@@ -1,13 +1,13 @@
 /*
     File name: Geiger_Counter.ino
-    Authors: Tfom Welch, Hayden Pegley, and Jason Scharff
+    Authors: Tom Welch, Hayden Pegley, and Jason Scharff
     Arduino Version: 1.6.9
     Description: This file provides the code for one of the three arduinos 
     connected to the Raspberry Pi. In particular, this file manages the collection of:
     1. Geiger Counter Counts Per Minute
     2. Anemometer Spins Per Minute.
 
-   Both the gieger counter and anemometer code are very similar
+   Both the geiger counter and anemometer code are very similar
    as they just collect the number of high voltages recorded during
    a one minute period. As such, data is sent once per minute to the raspberry pi.
 
@@ -60,7 +60,7 @@ void setup() {
   pinMode(geigerCounterPin, INPUT);
   //Configure the anemometer pin as an input.
   pinMode(anemometerPin, INPUT);
-  //set the current time variable to the current time in millis.
+  //set the current time variable to the current time in milliseconds.
   currentTime = millis();
   //Set the previous time variable to 
   prevTime = millis();

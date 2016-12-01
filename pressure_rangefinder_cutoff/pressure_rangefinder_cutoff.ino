@@ -39,7 +39,7 @@ const int pwPin = 7;
 //Variable to store pulse.
 long rangeFinderTime;
 
-//BME 280 pressure sensor pinouts
+//BME 280 pressure sensor pin-outs
 
 //Pin for SPI clock.
 #define BME_SCK 13
@@ -51,7 +51,7 @@ long rangeFinderTime;
 #define BME_CS 10
 
 //Create a macro for the sea level pressure to use
-//for BME280 approximation of altitud in hectapascals.
+//for BME280 approximation of altitude in hectopascals.
 #define SEALEVELPRESSURE_HPA (1013.25)
 
 //Initialize the BME280 object over SPI.
@@ -99,13 +99,13 @@ void loop() {
   rangeFinderTime = pulseIn(pwPin, HIGH);
 
   //bme280
-  //Read temperature in degrees celsius from BME280.
+  //Read temperature in degrees Celsius from BME280.
   double temperature = bme.readTemperature();
   //Read pressure in pascals from BME280.
   double pressure = bme.readPressure();
   //Read altitude as estimated by the BME280 sensor with the sea
-  //level pressure of SEALEVELPRESSURE_HPA (in hectapascals).
-  //Not actually used, but an interesting datapoint nontheless.
+  //level pressure of SEALEVELPRESSURE_HPA (in hectopascals).
+  //Not actually used, but an interesting data point nonetheless.
   double bme_altitude = bme.readAltitude(SEALEVELPRESSURE_HPA);
   //Read humidity from BME280 as a relative percentage.
   double humidity = bme.readHumidity();
@@ -147,7 +147,7 @@ void sendFrequentData(double temperature, double pressure, double bme_altitude, 
     root["exterior_humidity"] = humidity;
     //Add the exterior pressure to the JSON object. Include 5 decimal places.
     root["exterior_pressure"] = double_with_n_digits(pressure, 5);
-    //Add the altitude as estimated by the BME280 sensor. Not used in the data, but an interesting datapoint, nontheless.
+    //Add the altitude as estimated by the BME280 sensor. Not used in the data, but an interesting data point, nonetheless.
     root["estimated_altitude"] = bme_altitude;
     //Add the time taken for the sound to travel across the fixed distance in the payload to the JSON object.
     root["sound_time"] = rangeFinderTime;
