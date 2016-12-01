@@ -26,7 +26,7 @@ sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Sensors/Temperature")
 sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Camera")
 
 #import functions to operate camera
-from camera import *
+#from camera import *
 #import code to handle interior temperature
 from temperature import *
 
