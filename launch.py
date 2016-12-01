@@ -195,7 +195,6 @@ def handle_raspberry_pi_gpio():
         #add the interior temperature reading to the csv
         add_value_to_csv(GPIO_FILENAME, GPIO_KEYS, dictionary)
         #wait a second before reading more data
-        time.sleep(1)
 
 #function to read data from pressure arduino
 def handle_pressure_sensor():
