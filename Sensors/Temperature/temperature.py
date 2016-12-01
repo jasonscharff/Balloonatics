@@ -3,7 +3,7 @@
     Author: Jason Scharff
     Python Version: 2.7
     Description: Provides a wrapper around the Adafruit_BME280 combined temperature/humidity/pressure sensor.
-    Provides conviennce function to take a reading of each datapoint from the attached BME280 sensor
+    Provides convenience function to take a reading of each data point from the attached BME280 sensor
     and return it as a Python Dictionary object.
 '''
 
@@ -18,7 +18,7 @@ sensor = BME280(mode=BME280_OSAMPLE_8)
 
 #function to return a reading from the interior temperature sensor as a dictionary
 def get_temperature_reading():
-	#read the temperature in degrees celsius
+	#read the temperature in degrees Celsius
 	degrees = sensor.read_temperature()
 	#read the pressure in pascals
 	pascals = sensor.read_pressure()

@@ -2,14 +2,14 @@
     File name: launch.py
     Author: Jason Scharff
     Python Version: 2.7
-    Description: Provides the main functions of the data aquisition system. This file is run
+    Description: Provides the main functions of the data acquisition system. This file is run
     upon boot of the Raspberry Pi which triggers the creation of files to store the incoming data
-    and begin recieving data from three arduinos plugged in over USB as well as trigger the camera
+    and begin receiving data from three arduinos plugged in over USB as well as trigger the camera
     to record video and take photos as well as collect data from any sensors connected
     to the raspberry pi's GPIO sensors (just the interior temperature sensor, but could have been
     expanded to more sensors).
 
-    This file is designed to collect data from various sources simulatenously. Each arduino connected
+    This file is designed to collect data from various sources simultaneously. Each arduino connected
     to the Raspberry Pi sends data to the Raspberry Pi over USB in JSON format which this program reads 
     completely asynchronously and then saves all of the data asynchronously in a CSV format. 
     Moreover, the camera also operates in an asynchronous manner as do the sensors connected to the
@@ -19,7 +19,7 @@
 
 #Begin imports.
 
-#avoid integer division issues globally by using Python 3 style divison.
+#avoid integer division issues globally by using Python 3 style division.
 from __future__ import division
 
 #used to run background threads
@@ -105,7 +105,7 @@ PRESSURE_THRESHOLD = 1560 #in Pa
 #initially set to false.
 has_cut_down = False
 
-#initialize a global variable of when the data collection started. Intialized to the correct
+#initialize a global variable of when the data collection started. Initialized to the correct
 #value once all arduinos are plugged in
 start_time = None
 
@@ -141,7 +141,7 @@ def handle_geiger_sensor():
         try:
             #convert json input into a python dictionary object
             dictionary_representaion = json.loads(serial_input)
-            #add the json serialzied dictionary onto the appropriate csv.
+            #add the json serialized dictionary onto the appropriate csv.
             add_value_to_csv(GEIGER_ARDUINO_FILENAME, GEIGER_ARDUINO_KEYS, dictionary_representaion)
         #exception thrown, likely from converting to json.
         except:
@@ -159,7 +159,7 @@ def handle_gps_data():
         #the gps will feed us a lot of data. We only need the GPGGA prefixed lines.
         if string.startswith('$GPGGA'):
             #the line is contains values separated by a comma. Split the lines into an array of components
-            #using the comma as a delimetter.
+            #using the comma as a delimiter.
             components = string.split(',')
             #if the line is too short because something got corrupted in transmission ignore it.
             if len(components) >= 12:
@@ -175,7 +175,7 @@ def handle_gps_data():
                 direction_lng = components[5]
                 #the fix quality is the sixth component.
                 fix_quality = components[6]
-                #the number of satelites found by the GPS is the seventh component
+                #the number of satellites found by the GPS is the seventh component
                 num_satelites = components[7]
                 #the horizontal dilution of precision (hdop) which gives the relative accuracy 
                 #of the horizontal position is the eigth component
@@ -200,7 +200,7 @@ def handle_gps_data():
                 #add the newly created dictionary to the appropriate csv file.
                 add_value_to_csv(GPS_ARDUINO_FILENAME, GPS_ARDUINO_KEYS, dictionary)
 
-    #continiously read from the gps serial.
+    #continuously read from the gps serial.
     handle_serial_input(gps_serial, gps_handler)
 
 
@@ -225,7 +225,7 @@ def handle_pressure_sensor():
         #leading to a preliminary cutdown
         global last_pressure_samples
         try: #wrap serial reading in a try/catch to avoid corrupt data causing a crash
-            #use global version of has_cut_down instead a new intance varaible. Avoids cutting down multiple times.
+            #use global version of has_cut_down instead a new instance variable. Avoids cutting down multiple times.
             global has_cut_down 
             #convert serial input into a python dictionary object.
             dictionary_representaion = json.loads(serial_input)
@@ -245,8 +245,16 @@ def handle_pressure_sensor():
                 if length > NUM_PRESSURE_SAMPLES:
                     #trim down last_pressure_samples to cap length at NUM_PRESSURE_SAMPLES 
                     last_pressure_samples = last_pressure_samples[NUM_PRESSURE_SAMPLES-length:]
+                    #note that this should have said last_pressure_samples = last_pressure_samples[length-NUM_PRESSURE_SAMPLES:]
+                    #the code used during the launch cut it down to all but the last data point.
+                    #This error was partly responsible for the preliminary cutdown.
+
                     #get average of last_pressure_samples
                     average = reduce(lambda x, y: x + y, last_pressure_samples) / length
+                    #note that the length was not reset when it should have been. The line should read
+                    #average = reduce(lambda x, y: x + y, last_pressure_samples) / len(last_pressure_samples)
+                    #This error was partly responsible for the preliminary cutdown.
+
                     #if the average of the last NUM_PRESSURE_SAMPLES > threshold we want to cutdown.
                     if average < PRESSURE_THRESHOLD:
                         cutdown()
