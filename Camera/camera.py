@@ -1,6 +1,14 @@
-#this file handles all of the camera operations
+'''
+    File name: camera.py
+    Author: Jason Scharff
+    Python Version: 2.7
+    Description: Provides a wrapper around the picamera module to provide convinence
+    functions to take both photos and video and save them with a standardized naming scheme
+    in a standardized location.
+'''
 
-#import the picamera module to interact with the camera
+
+#import the picamera module to interact with the standard raspberry pi camera.
 from picamera import PiCamera
 #import the time module to assign timestamps to our filenames and allow sleeping.
 import time

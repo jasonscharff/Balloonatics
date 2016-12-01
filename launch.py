@@ -1,6 +1,25 @@
-#python packages
+'''
+    File name: launch.py
+    Author: Jason Scharff
+    Python Version: 2.7
+    Description: Provides the main functions of the data aquisition system. This file is run
+    upon boot of the Raspberry Pi which triggers the creation of files to store the incoming data
+    and begin recieving data from three arduinos plugged in over USB as well as trigger the camera
+    to record video and take photos as well as collect data from any sensors connected
+    to the raspberry pi's GPIO sensors (just the interior temperature sensor, but could have been
+    expanded to more sensors).
 
-#avoid integer division issues globally by using Python3 Divison
+    This file is designed to collect data from various sources simulatenously. Each arduino connected
+    to the Raspberry Pi sends data to the Raspberry Pi over USB in JSON format which this program reads 
+    completely asynchronously and then saves all of the data asynchronously in a CSV format. 
+    Moreover, the camera also operates in an asynchronous manner as do the sensors connected to the
+    GPIO pins of the Raspberry Pi. 
+'''
+
+
+#Begin imports.
+
+#avoid integer division issues globally by using Python 3 style divison.
 from __future__ import division
 
 #used to run background threads
@@ -15,14 +34,13 @@ import serial
 import csv
 #filenames contain random uuids to ensure nothing is ever overwritten.
 import uuid
-#used for the altitude calculation function.
-import math
 
-#insert files into the directory
+#insert files stored in alternative directories into the working directory
+#in order to be imported
 import sys
-#code for interior temperature sensor
+#add code for interior temperature sensor to working directory
 sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Sensors/Temperature")
-#code for camera
+#add code for camera to working directory
 sys.path.insert(0, "/home/pi/Desktop/Balloonatics/Camera")
 
 #import functions to operate camera
@@ -30,7 +48,7 @@ from camera import *
 #import code to handle interior temperature
 from temperature import *
 
-#standard baud rate for communication with arduinos
+#standard baud rate for serial communication with arduinos
 BAUD_RATE = 9600
 
 #initialize serial communication with geiger arduino to None to declare as global variable
@@ -45,7 +63,7 @@ pressure_serial = None
 #Base directory to store data
 BASE_DIRECTORY = '/home/pi/Desktop/data/'
 
-#filename of csv used to store geiger counter data
+#filename of csv used to store geiger counter and anemometer data
 GEIGER_ARDUINO_FILENAME = ''
 
 #keys/column names for the csv used to store information from the geiger counter arduino
@@ -58,13 +76,13 @@ GPS_ARDUINO_FILENAME = ''
 GPS_ARDUINO_KEYS = ['time', 'gps_timestamp', 'lat', 'lat_direction', 
 'lng', 'lng_direction', 'fix_quality', 'num_satelites','hdop', 'altitude', 'height_geoid_ellipsoid']
 
-#filename of csv used to store data from pressure arduino
+#filename of csv used to store exterior pressure, speed of sound, and solar panel output data.
 PRESSURE_ARDUINO_FILENAME = ''
 
 #keys/column names for the csv used to store information from the pressure arduino
 PRESSURE_ARDUINO_KEYS = ['time', 'exterior_pressure', 'exterior_humidity', 'exterior_temperature', 'estimated_altitude', 'sound_time','blue_voltage', 'red_voltage', 'white_voltage']
 
-#filename of csv used to store data from gpio pin connected sensors
+#filename of csv used to store data from gpio pin connected sensors (only the interior temperature sensor)
 GPIO_FILENAME = ''
 
 #keys/column names for the csv used to store information from sensors connected to the gpio pins.
@@ -191,7 +209,7 @@ def handle_raspberry_pi_gpio():
     #read data forever
     while True:
         #call function in temperature module to get the temperature readings as a python dictionary
-        dictionary = get_temperature_reading_json()
+        dictionary = get_temperature_reading()
         #add the interior temperature reading to the csv
         add_value_to_csv(GPIO_FILENAME, GPIO_KEYS, dictionary)
         #wait a second before reading more data
@@ -262,17 +280,6 @@ def cutdown():
                 #log the time at which it cutdown.
                 file.write('CUTDOWN AT: ' + str(time.time()))
 
-
-#pressure in pascals        
-def get_altitude_from_pressure(pressure):
-    pressure /= 1000
-    if pressure > 22.707:
-        altitude = 44397.5-44388.3 * ((pressure/101.29) ** .19026)
-    elif pressure < 2.483:
-        altitude = 72441.47 * ((pressure/2.488) ** -.0878) - 47454.96
-    else:
-        altitude = 11019.12 - 6369.43 * math.log(pressure/22.65)
-    return altitude
 
 #function to add the values from a dictionary into a given csv
 #arg, filename: name of the csv
