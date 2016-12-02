@@ -60,6 +60,10 @@ gps_serial = None
 #initialize serial communication with pressure arduino to None to declare as global variable
 pressure_serial = None
 
+#initialize serial communication with the radio to None to declare as global variable.
+#commented out because the radio was removed before launch.
+#radio_serial = None
+
 #Base directory to store data
 BASE_DIRECTORY = '/home/pi/Desktop/data/'
 
@@ -115,9 +119,28 @@ TIME_THRESHOLD = 3600 #1 hour
 #signal to send to arduino when to cutoff.
 CUTOFF_SIGNAL = 'c'
 
+#initialize a dictionary of dictionaries to send to the Radio arduino in JSON format.
+#the dictionary is setup so that the first key is the csv filename which corresponds
+#to a dictionary of the keys and values last saved in the CSV.
+#commented out because the radio was removed before launch.
+#RADIO_DICTIONARY = {}
+
 #function to continuously take a video and then a photo
 #length of each video set by the camera.py module.
 #should be called on separate thread to avoid blocking main thread.
+
+#def send_to_radio():
+	#convert the radio dictionary to a JSON string to send to radio in JSON format.
+#	jsonified = json.dumps(RADIO_DICTIONARY)
+	#add a new line character to signify the end of the string.
+#	text = jsonified = + '\n'
+	#send the text 20 times to make sure the Arduino picks up on the strong
+#	for in xrange(0,20):
+		#write the text to the Radio Arduino
+#		radio_serial.write(text)
+	#restart the timer to call this function again in a minute.
+#	threading.Timer(60, send_to_radio).start()
+
 def operate_camera():
     while True: #do forever
         take_video() #take a single video
@@ -298,6 +321,11 @@ def add_value_to_csv(filename, keys, dictionary):
     #and add the time if it doesn't exist
     dictionary = filter_csv_dictionary(keys, dictionary)
 
+    #add the new dictionary to the RADIO_DICTIONARY to send to the radio
+    #commented out because the radio was removed before launch.
+    #RADIO_DICTIONARY[filename] = dictionary
+
+
     #open the csv file to write to in append mode to avoid overwriting existing data.
     with open(filename, 'a') as file:
         #intitialize a python csv dictwriter from the file and keys
@@ -412,7 +440,7 @@ def open_serial():
     #use global pressure_serial so the serial can be accessible from everywhere.
     global pressure_serial
     
-    #wait until the geiger_serial is created so that if the script is run at boot it doesn't find nothing and crash
+    #wait until the geiger_serial is created so that if the script is run at boot and doesn't find anything it won't crash
     while geiger_serial == None:
         #if nothing is found an exception will be thrown. Protect against that crash
         try:
@@ -423,7 +451,7 @@ def open_serial():
             #set the geiger_serial to None
             geiger_serial = None
 
-    #wait until the gps_serial is created so that if the script is run at boot it doesn't find nothing and crash
+    #wait until the gps_serial is created so that if the script is run at boot and doesn't find anything it won't crash
     while gps_serial == None:
         #if nothing is found an exception will be thrown. Protect against that crash
         try:
@@ -434,7 +462,7 @@ def open_serial():
             #set the gps_serial to None
             gps_serial = None
 
-    #wait until the pressure_serial is created so that if the script is run at boot it doesn't find nothing and crash
+    #wait until the pressure_serial is created so that if the script is run at boot and doesn't find anything it won't crash
     while pressure_serial == None:  #if nothing is found an exception will be thrown. Protect against that crash
         try:
             #attempt to create the geiger serial at port 2 (assigned by Linux in the order devices are plugged in)
@@ -443,6 +471,17 @@ def open_serial():
         except:
             #set the geiger_serial to None
             pressure_serial = None
+
+#radio serial code to open connection with the radio arduino.
+#commented out because the radio was removed.
+     #wait until the radio_serial is created so that if the script is run at boot and doesn't find anything it won't crash.
+#    while radio_serial == None:
+#    	try: #if nothing is found an exception will be thrown. Protect against that crash
+	   		#try to open the radio serial at port 3.
+#    		radio_serial = serial.Serial('/dev/ttyACM3', 4800)
+#   	except:
+    		#set the radio serial to None as nothing was found
+#    		radio_serial = None
 
 def main():
     #open serial connections to each of the arduinos. 
@@ -467,6 +506,10 @@ def main():
 
     #start getting data from the pressure arduino on a new thread
     thread.start_new_thread(handle_pressure_sensor, ())
+
+    #create a timer to call the send data to radio function every minute.
+    #commented out because the radio was removed before launch.
+#   threading.Timer(60, sendToRadio).start()
 
     #start collecting data from sensors attached to the GPIO pins (the interior temperature sensor)
     #something needs to be occupying the main thread for the program to not return
