@@ -1,4 +1,6 @@
-BASE_DIRECTORY = '/users/jasonscharff/Documents/ASR_Balloonatics/'
+#
+import os
+BASE_DIRECTORY = os.path.expanduser('~/Documents/ASR_Balloonatics/')
 BAUD_RATE = 4800
 import serial
 import uuid
