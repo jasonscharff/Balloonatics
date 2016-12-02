@@ -192,10 +192,10 @@ def handle_raspberry_pi_gpio():
     while True:
         #call function in temperature module to get the temperature readings as a python dictionary
         dictionary = get_temperature_reading_json()
+        print dictionary
         #add the interior temperature reading to the csv
         add_value_to_csv(GPIO_FILENAME, GPIO_KEYS, dictionary)
         #wait a second before reading more data
-        time.sleep(0.1)
 
 #function to read data from pressure arduino
 def handle_pressure_sensor():
